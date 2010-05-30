@@ -79,15 +79,10 @@ void CarregaMatriz(int Mapa[iQtdeFases][iTilesX][iTilesY]) {
                de varrer o sLinha sai do for e espera próxima linha, se houver.
              */
             for (x = 0; x < iTilesX; x++) {
-                printf("%c", sLinha[x]);
                 Mapa[iFase][x][y] = sLinha[x];
             }
-            printf("\n");
         }
 
-        printf("\n");
-        printf("\n");
-        printf("\n");
         fclose(fp);
     }
 }
