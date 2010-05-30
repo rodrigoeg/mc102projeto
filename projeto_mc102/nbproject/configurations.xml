@@ -31,6 +31,7 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
+            <linkerLibLibItem>alleg</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -53,7 +54,9 @@
         </fortranCompilerTool>
         <linkerTool>
           <linkerLibItems>
+            <linkerLibLibItem>alleg</linkerLibLibItem>
           </linkerLibItems>
+          <commandLine>-lalleg</commandLine>
         </linkerTool>
       </compileType>
     </conf>
