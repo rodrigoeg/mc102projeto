@@ -117,7 +117,13 @@ void DesenhaCenario(BITMAP *Cenario, int iFase, int Mapa[QTDE_FASES][2][TILES_X]
                         draw_sprite(Cenario, Textura[2], x * TAM_TILES_X, y * TAM_TILES_Y);
                     } else {
                         if ((char) Mapa[iFase][FUNDO][x][y] == 'P') { // Pacman
-                            
+                            if (tile == '-') { // Grama
+                                draw_sprite(Cenario, Textura[1], x * TAM_TILES_X, y * TAM_TILES_Y);
+                            } else {
+                                if (tile == '.') { // Chão
+                                    draw_sprite(Cenario, Textura[2], x * TAM_TILES_X, y * TAM_TILES_Y);
+                                }
+                            }
                             draw_sprite(Cenario, Pacman, x * TAM_TILES_X, y * TAM_TILES_Y);
                         }
                     }
