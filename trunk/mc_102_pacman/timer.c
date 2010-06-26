@@ -26,7 +26,6 @@ void update_timer(BITMAP *buffer, BITMAP *sheet) {
     masked_blit(sheet, buffer, 0, (seg/10)*30, 600, 0, sheet->w, 27);
     masked_blit(sheet, buffer, 0, (seg%10)*30, 620, 0, sheet->w, 27);
     destroy_bitmap(bolinha);
-    vsync();
 }
 
 
