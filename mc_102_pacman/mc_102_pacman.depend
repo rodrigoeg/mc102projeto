@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1277569673 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<allegro.h>
+	"carrega_fases.h"
+
+1277569673 c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\carrega_fases.h
+
