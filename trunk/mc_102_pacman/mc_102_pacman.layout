@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="main.c" open="1" top="1" tabpos="1">
-		<Cursor position="5939" topLine="0" />
+	<File name="carrega_fases.c" open="1" top="1" tabpos="2">
+		<Cursor position="218" topLine="207" />
+	</File>
+	<File name="main.c" open="1" top="0" tabpos="1">
+		<Cursor position="7543" topLine="39" />
 	</File>
 </CodeBlocks_layout_file>

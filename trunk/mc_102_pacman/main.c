@@ -7,7 +7,7 @@
 #define LARGURA_TELA 640
 #define ALTURA_TELA 480
 
-void anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao, int fase_atual) {
+int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao, int fase_atual) {
     int x = 0;
     int y = 0;
     int posicao_x, posicao_y;
@@ -29,27 +29,32 @@ void anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao
             if (fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1] != '#') {
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1];
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1] = 'P';
+                return 1;
             }
             break;
         case DIR_DOWN:
             if (fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1] != '#') {
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1];
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1] = 'P';
+                return 1;
             }
             break;
         case DIR_LEFT:
             if (fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y] != '#') {
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y];
                 fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y] = 'P';
+                return 1;
             }
             break;
         case DIR_RIGHT:
             if (fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y] != '#') {
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y];
                 fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y] = 'P';
+                return 1;
             }
             break;
     }
+    return 0;
 }
 
 /*
@@ -86,30 +91,28 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
 
             buffer_teclado = 15;
         }
-
-        if (key[KEY_UP]) {
-            buffer_teclado = 15;
-            *ultima_movimentacao = DIR_UP;
-            anda_pacman(fases_cenario, DIR_UP, *fase_atual);
-            printf("up \n");
-        }
-        if (key[KEY_DOWN]) {
-            buffer_teclado = 15;
-            *ultima_movimentacao = DIR_DOWN;
-            anda_pacman(fases_cenario, DIR_DOWN, *fase_atual);
-            printf("down \n");
-        }
-        if (key[KEY_LEFT]) {
-            buffer_teclado = 15;
-            *ultima_movimentacao = DIR_LEFT;
-            anda_pacman(fases_cenario, DIR_LEFT, *fase_atual);
-            printf("left \n");
-        }
-        if (key[KEY_RIGHT]) {
-            buffer_teclado = 15;
-            *ultima_movimentacao = DIR_RIGHT;
-            anda_pacman(fases_cenario, DIR_RIGHT, *fase_atual);
-            printf("right \n");
+        while (keypressed()) {
+            if (key[KEY_UP]) {
+                buffer_teclado = 15;
+                *ultima_movimentacao = DIR_UP;
+                if (anda_pacman(fases_cenario, DIR_UP, *fase_atual)) break;
+            }
+            if (key[KEY_LEFT]) {
+                buffer_teclado = 15;
+                *ultima_movimentacao = DIR_LEFT;
+                if (anda_pacman(fases_cenario, DIR_LEFT, *fase_atual)) break;
+            }
+            if (key[KEY_RIGHT]) {
+                buffer_teclado = 15;
+                *ultima_movimentacao = DIR_RIGHT;
+                if (anda_pacman(fases_cenario, DIR_RIGHT, *fase_atual)) break;
+            }
+            if (key[KEY_DOWN]) {
+                buffer_teclado = 15;
+                *ultima_movimentacao = DIR_DOWN;
+                if (anda_pacman(fases_cenario, DIR_DOWN, *fase_atual)) break;
+            }
+            break;
         }
     } else buffer_teclado--;
 }
@@ -177,9 +180,10 @@ int main() {
     int fase_atual = 0; // Guarda o index da fase atual.
     int full_screen = FALSE;
     int ultima_movimentacao = DIR_RIGHT;
+    int frame, frame_cont=10;
 
     //Variável do tipo BITMAP responsável por guardar as texturas
-    BITMAP *pacman, *numeros;
+    BITMAP *pacman, *pacman2, *numeros;
     BITMAP * texturas[3];
 
     BITMAP *buffer = NULL;
@@ -191,6 +195,7 @@ int main() {
 
     //carrega a imagem do pacman
     pacman = load_bitmap("imagens/pac-man.bmp", NULL);
+    pacman2 = load_bitmap("imagens/pac-man2.bmp", NULL);
 
     // Define o índice 0 da textura como sendo parede
     texturas[0] = load_bitmap("tiles/parede.bmp", NULL);
@@ -210,7 +215,12 @@ int main() {
 
     while (!key[KEY_ESC]) {
         clear_bitmap(buffer);
-        atualiza_tela(buffer, fase_atual, fases_cenario, pacman, texturas, ultima_movimentacao, numeros);
+        if (frame_cont <= 0) {
+            frame = (frame+1)%2;
+            frame_cont = 10;
+        }
+        else frame_cont -= 1;
+        atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
         teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao);
         update_timer(buffer, numeros);
 

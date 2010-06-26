@@ -248,12 +248,8 @@ void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES]
                     }
                 }
             }
-
-
             if ((fases_cenario[fase_atual][FRENTE][x][y] != -1) && (fases_cenario[fase_atual][FUNDO][x][y] != 'P')) {
-                printf("%d \n", fases_cenario[fase_atual][FRENTE][x][y]);
-                masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
-                //draw_sprite(buffer, texturas[2], x * TAM_TILES_X, y * TAM_TILES_Y);
+                masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, 6 + x * TAM_TILES_X , y * TAM_TILES_Y, sheet->w, 30);
             }
         }
     }
