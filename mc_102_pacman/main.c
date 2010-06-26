@@ -67,7 +67,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
     //Tudo que estiver dentro o IF abaixo será executado a cada 30 ciclos de CPU
     if (buffer_teclado == 0) {
         //fullscreen mode
-        if (key[KEY_F]) {
+        if (key[KEY_ALT] && key[KEY_ENTER]) {
 
             if (*full_screen == TRUE) {
                 set_windowed();
@@ -84,7 +84,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
             else
                 *fase_atual = 0;
 
-            buffer_teclado = 30;
+            buffer_teclado = 15;
         }
 
         if (key[KEY_UP]) {
@@ -210,7 +210,7 @@ int main() {
 
     while (!key[KEY_ESC]) {
         clear_bitmap(buffer);
-        atualiza_tela(buffer, fase_atual, fases_cenario, pacman, texturas, ultima_movimentacao);
+        atualiza_tela(buffer, fase_atual, fases_cenario, pacman, texturas, ultima_movimentacao, numeros);
         teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao);
         update_timer(buffer, numeros);
 
