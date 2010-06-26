@@ -9,28 +9,37 @@
 void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int fase_atual) {
     static int sequencia = 0;
     int y, x;
+    int i;
     int mat[5];
     int parar = FALSE;
     fase_funcao(mat, fase_atual);
 
-    printf("\n\n\n");
     for (y = 0; ((y < TILES_Y) && (parar != TRUE)); y++) {
         for (x = 0; ((x < TILES_X) && (parar != TRUE)); x++) {
-            printf("%c ", fases_cenario[fase_atual][FUNDO][x][y]);
             if ((char) fases_cenario[fase_atual][FUNDO][x][y] == 'P') { // Pacman
                 parar = TRUE;
             }
         }
-        printf("\n");
     }
 
-
-    if (fases_cenario[fase_atual][FRENTE][x][y] == mat[sequencia]) {
-        fases_cenario[fase_atual][FRENTE][x][y] == -1;
+    if (fases_cenario[fase_atual][FRENTE][x-1][y-1] ==  mat[sequencia]) {
+        fases_cenario[fase_atual][FRENTE][x-1][y-1] = -1;
         sequencia++;
-        printf("fasdfa");
+        printf("acertou \n");
+        //ganha pontos
+    } else{
+        if(fases_cenario[fase_atual][FRENTE][x-1][y-1] != -1) {
+            for(i=0;i<5;i++) {
+                if(fases_cenario[fase_atual][FRENTE][x-1][y-1] == mat[i]){
+                    sequencia++;
+                    break;
+                }
+            }
+            fases_cenario[fase_atual][FRENTE][x-1][y-1] = -1;
+            printf("errou \n");
+            //perde pontos
+        }
     }
-
 }
 
 
