@@ -4,16 +4,17 @@
 #include <allegro.h>
 #include "carrega_fases.h"
 
-int iFaseAtual = 0; // Guarda o index da fase atual.
+#define LARGURA_TELA 640
+#define ALTURA_TELA 480
 
-void anda_pacman(int Mapa[QTDE_FASES][2][TILES_X][TILES_Y], int direcao) {
+void anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao, int fase_atual) {
     int x = 0;
     int y = 0;
     int posicao_x, posicao_y;
 
     for (y = 0; y < TILES_Y; y++) {
         for (x = 0; x < TILES_X; x++) {
-            if ((char) Mapa[iFaseAtual][FUNDO][x][y] == 'P') { // Pacman
+            if ((char) fases_cenario[fase_atual][FUNDO][x][y] == 'P') { // Pacman
                 posicao_x = x;
                 posicao_y = y;
                 x = TILES_X;
@@ -24,27 +25,27 @@ void anda_pacman(int Mapa[QTDE_FASES][2][TILES_X][TILES_Y], int direcao) {
 
     switch (direcao) {
         case DIR_UP:
-            if (Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y - 1] != '#') {
-                Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y] = Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y - 1];
-                Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y - 1] = 'P';
+            if (fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1] != '#') {
+                fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1];
+                fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1] = 'P';
             }
             break;
         case DIR_DOWN:
-            if (Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y + 1] != '#') {
-                Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y] = Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y + 1];
-                Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y + 1] = 'P';
+            if (fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1] != '#') {
+                fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1];
+                fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1] = 'P';
             }
             break;
         case DIR_LEFT:
-            if (Mapa[iFaseAtual][FUNDO][posicao_x - 1][posicao_y] != '#') {
-                Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y] = Mapa[iFaseAtual][FUNDO][posicao_x - 1][posicao_y];
-                Mapa[iFaseAtual][FUNDO][posicao_x - 1][posicao_y] = 'P';
+            if (fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y] != '#') {
+                fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y];
+                fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y] = 'P';
             }
             break;
         case DIR_RIGHT:
-            if (Mapa[iFaseAtual][FUNDO][posicao_x + 1][posicao_y] != '#') {
-                Mapa[iFaseAtual][FUNDO][posicao_x][posicao_y] = Mapa[iFaseAtual][FUNDO][posicao_x + 1][posicao_y];
-                Mapa[iFaseAtual][FUNDO][posicao_x + 1][posicao_y] = 'P';
+            if (fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y] != '#') {
+                fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y];
+                fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y] = 'P';
             }
             break;
     }
@@ -54,48 +55,63 @@ void anda_pacman(int Mapa[QTDE_FASES][2][TILES_X][TILES_Y], int direcao) {
 A função abaixo é responsável por controlar as entradas do teclado, qualquer
 tecla pressionada durante a execução do jogo.
  */
-void Teclado(int Mapa[QTDE_FASES][2][TILES_X][TILES_Y]) {
+void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *full_screen, int *ultima_movimentacao) {
     /*
     Quando declaramos uma variável como sendo static quer dizer que mesmo saindo
     da função ela não vai perder o valor dela. Dessa forma, utilizamos a variável
     abaixo para controlar o tempo de uma tecla a outra.
      */
-    static int Buffer_Teclado = 0;
+    static int buffer_teclado = 0;
 
     //Tudo que estiver dentro o IF abaixo será executado a cada 30 ciclos de CPU
-    if (Buffer_Teclado == 0) {
+    if (buffer_teclado == 0) {
+        //fullscreen mode
+        if (key[KEY_F]) {
+
+            if (*full_screen == TRUE) {
+                set_windowed();
+            } else {
+                set_full_screen();
+            }
+            *full_screen = (*full_screen == TRUE) ? FALSE : TRUE;
+        }
+
         // Muda o Cenário caso aperte a tecla espaço
         if (key[KEY_SPACE]) {
-            if (iFaseAtual < (QTDE_FASES - 1))
-                iFaseAtual++;
+            if (*fase_atual < (QTDE_FASES - 1))
+                *fase_atual = *fase_atual + 1;
             else
-                iFaseAtual = 0;
+                *fase_atual = 0;
 
-            Buffer_Teclado = 30;
+            buffer_teclado = 30;
         }
 
         if (key[KEY_UP]) {
-            Buffer_Teclado = 15;
-            anda_pacman(Mapa, DIR_UP);
+            buffer_teclado = 15;
+            *ultima_movimentacao = DIR_UP;
+            anda_pacman(fases_cenario, DIR_UP, *fase_atual);
             printf("up \n");
         }
         if (key[KEY_DOWN]) {
-            Buffer_Teclado = 15;
-            anda_pacman(Mapa, DIR_DOWN);
+            buffer_teclado = 15;
+            *ultima_movimentacao = DIR_DOWN;
+            anda_pacman(fases_cenario, DIR_DOWN, *fase_atual);
             printf("down \n");
         }
         if (key[KEY_LEFT]) {
-            Buffer_Teclado = 15;
-            anda_pacman(Mapa, DIR_LEFT);
+            buffer_teclado = 15;
+            *ultima_movimentacao = DIR_LEFT;
+            anda_pacman(fases_cenario, DIR_LEFT, *fase_atual);
             printf("left \n");
         }
         if (key[KEY_RIGHT]) {
-            Buffer_Teclado = 15;
-            anda_pacman(Mapa, DIR_RIGHT);
+            buffer_teclado = 15;
+            *ultima_movimentacao = DIR_RIGHT;
+            anda_pacman(fases_cenario, DIR_RIGHT, *fase_atual);
             printf("right \n");
         }
 
-    } else Buffer_Teclado--;
+    } else buffer_teclado--;
 }
 
 int inicia_allegro() {
@@ -120,7 +136,7 @@ int inicia_allegro() {
 
 
     // inicialize o modo gráfico com uma resolução de tela
-    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0)) {
+    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
         allegro_message(allegro_error);
         return FALSE;
     }
@@ -128,6 +144,22 @@ int inicia_allegro() {
     set_window_title("Pacman");
 
     return TRUE;
+}
+
+int set_full_screen() {
+    // inicialize o modo gráfico com uma resolução de tela
+    if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
+        allegro_message(allegro_error);
+        return FALSE;
+    }
+}
+
+int set_windowed() {
+    // inicialize o modo gráfico com uma resolução de tela
+    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
+        allegro_message(allegro_error);
+        return FALSE;
+    }
 }
 
 int main() {
@@ -141,33 +173,53 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    int Mapa[QTDE_FASES][2][TILES_X][TILES_Y];
+    int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y];
+    int fase_atual = 0; // Guarda o index da fase atual.
+    int full_screen = FALSE;
+    int ultima_movimentacao = DIR_RIGHT;
 
-    BITMAP *Buffer = NULL;
-    Buffer = create_bitmap(SCREEN_W, SCREEN_H);
+    //Variável do tipo BITMAP responsável por guardar as texturas
+    BITMAP *pacman;
+    BITMAP * texturas[3];
 
-    CarregaMatriz(Mapa);
-    CarregaTexturas();
+    BITMAP *buffer = NULL;
+    buffer = create_bitmap(SCREEN_W, SCREEN_H);
+
+    carrega_matriz_jogo(fases_cenario);
+    //carrega_texturas(pacman, texturas);
+
+
+    //carrega a imagem do pacman
+    pacman = load_bitmap("imagens/pac-man.bmp", NULL);
+
+    // Define o índice 0 da textura como sendo parede
+    texturas[0] = load_bitmap("tiles/parede.bmp", NULL);
+
+    // Define o índice 1 da textura como sendo grama
+    texturas[1] = load_bitmap("tiles/grama.bmp", NULL);
+
+    // Define o índice 2 da textura como sendo chão
+    texturas[2] = load_bitmap("tiles/chao.bmp", NULL);
 
     while (!key[KEY_ESC]) {
-        clear_bitmap(Buffer);
-        DesenhaCenario(Buffer, iFaseAtual, Mapa);
-        Teclado(Mapa);
+        clear_bitmap(buffer);
+        atualiza_tela(buffer, fase_atual, fases_cenario, pacman, texturas, ultima_movimentacao);
+        teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao);
 
-        textprintf_centre_ex(Buffer, font, SCREEN_W / 2, (SCREEN_H / 2) - 10, makecol(255, 255, 0),
-                -1, "FASE: %d", iFaseAtual + 1);
-        textprintf_centre_ex(Buffer, font, SCREEN_W / 2, SCREEN_H / 2, makecol(255, 255, 0), -1,
+        textprintf_centre_ex(buffer, font, SCREEN_W / 2, (SCREEN_H / 2) - 10, makecol(255, 255, 0),
+                -1, "FASE: %d", fase_atual + 1);
+        textprintf_centre_ex(buffer, font, SCREEN_W / 2, SCREEN_H / 2, makecol(255, 255, 0), -1,
                 "Pressione espaço para mudar de fase.");
 
-        blit(Buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
+        blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
         vsync();
     }
 
     //Desaloca as imagens da memória
-    destroy_bitmap(Buffer);
-    destroy_bitmap(Textura[0]);
-    destroy_bitmap(Textura[1]);
-    destroy_bitmap(Textura[2]);
+    destroy_bitmap(buffer);
+    destroy_bitmap(texturas[0]);
+    destroy_bitmap(texturas[1]);
+    destroy_bitmap(texturas[2]);
     allegro_exit();
 
     return EXIT_SUCCESS;
