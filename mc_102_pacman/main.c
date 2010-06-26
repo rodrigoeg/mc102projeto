@@ -3,9 +3,13 @@
 #include <time.h>
 #include <allegro.h>
 #include "carrega_fases.h"
+#include "timer.h"
 
 #define LARGURA_TELA 640
 #define ALTURA_TELA 480
+
+volatile int close_button_pressed = FALSE;
+
 void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int fase_atual) {
     static int sequencia = 0;
     int y, x;
@@ -209,6 +213,12 @@ int set_windowed() {
     }
 }
 
+void close_button_handler(void) //Permite a utilização do botão "Fechar" para fechar o aplicativo
+{
+    close_button_pressed = TRUE;
+}
+END_OF_FUNCTION(close_button_handler)
+
 int main() {
 
     /*
@@ -225,6 +235,10 @@ int main() {
     int full_screen = FALSE;
     int ultima_movimentacao = DIR_RIGHT;
     int frame;
+
+    LOCK_FUNCTION(close_button_handler);
+    set_close_button_callback(close_button_handler);
+
 
     //Variável do tipo BITMAP responsável por guardar as texturas
     BITMAP *pacman, *pacman2, *numeros;
@@ -257,7 +271,7 @@ int main() {
     install_int(contador, 1000);
     novo_contador(120);
 
-    while (!key[KEY_ESC]) {
+    while (!key[KEY_ESC] && !close_button_pressed) {
         clear_bitmap(buffer);
         atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
         teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame);

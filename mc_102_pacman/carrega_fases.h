@@ -24,10 +24,6 @@ void carrega_texturas(BITMAP *, BITMAP *[]);
 void carrega_matriz_jogo(int [QTDE_FASES][2][TILES_X][TILES_Y]);
 void atualiza_tela(BITMAP *, int, int [QTDE_FASES][2][TILES_X][TILES_Y], BITMAP *, BITMAP *[], int, BITMAP *);
 
-void novo_contador(int);
-void contador();
-void update_timer(BITMAP *, BITMAP *);
-
 void fase_funcao(int [], int);
 void fase_numeros_errados(int [], int);
 

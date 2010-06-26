@@ -1,12 +1,13 @@
 # depslib dependency file v1.0
-1277586736 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\main.c
+1277588782 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
 	<allegro.h>
 	"carrega_fases.h"
+	"timer.h"
 
-1277582448 c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\carrega_fases.h
+1277588559 c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\carrega_fases.h
 
 1277584603 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\carrega_fases.c
 	<stdio.h>
@@ -34,4 +35,6 @@
 
 1277579415 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\timer.c
 	<allegro.h>
+
+1277588565 c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\timer.h
 
