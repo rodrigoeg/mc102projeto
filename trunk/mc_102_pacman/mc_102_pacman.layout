@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="Debug" />
-	<File name="carrega_fases.c" open="1" top="1" tabpos="2">
-		<Cursor position="218" topLine="207" />
+	<ActiveTarget name="Release" />
+	<File name="carrega_fases.c" open="1" top="0" tabpos="2">
+		<Cursor position="83" topLine="0" />
 	</File>
-	<File name="main.c" open="1" top="0" tabpos="1">
-		<Cursor position="7543" topLine="39" />
+	<File name="carrega_fases.h" open="1" top="0" tabpos="3">
+		<Cursor position="756" topLine="7" />
+	</File>
+	<File name="main.c" open="1" top="1" tabpos="1">
+		<Cursor position="8612" topLine="258" />
+	</File>
+	<File name="timer.c" open="1" top="0" tabpos="4">
+		<Cursor position="104" topLine="0" />
+	</File>
+	<File name="timer.h" open="1" top="0" tabpos="5">
+		<Cursor position="52" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>
