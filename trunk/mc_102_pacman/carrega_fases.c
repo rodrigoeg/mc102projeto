@@ -72,11 +72,12 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
              */
 
 
-
-
             for (x = 0; x < TILES_X; x++) {
                 //printf("%c ", (int)char_count_linha[x]);
                 fases_cenario[fases][FRENTE][x][y] = -1;
+
+                fases_cenario[fases][FUNDO][x][y] = char_count_linha[x];
+
 
                 if ((char) fases_cenario[fases][FUNDO][x + 1][y + 1] == '.') {
                     tile = (char) fases_cenario[fases][FUNDO][x + 1][y + 1];
@@ -101,14 +102,13 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
                         }
                     }
                 }
+
                 switch(char_count_linha[x]) {
                     case '0':
-                        printf("%d \n", mat[0]);
                         fases_cenario[fases][FRENTE][x][y] = mat[0];
                         fases_cenario[fases][FUNDO][x][y] = tile;
                         break;
                     case '1':
-                        printf("%d \n", mat[1]);
                         fases_cenario[fases][FRENTE][x][y] = mat[1];
                         fases_cenario[fases][FUNDO][x][y] = tile;
                         break;
@@ -145,8 +145,6 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
                         fases_cenario[fases][FUNDO][x][y] = tile;
                         break;
                 }
-
-                fases_cenario[fases][FUNDO][x][y] = char_count_linha[x];
 
             }
             printf("\n");
@@ -249,7 +247,7 @@ void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES]
                 }
             }
             if ((fases_cenario[fase_atual][FRENTE][x][y] != -1) && (fases_cenario[fase_atual][FUNDO][x][y] != 'P')) {
-                masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, 6 + x * TAM_TILES_X , y * TAM_TILES_Y, sheet->w, 30);
+                 masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
             }
         }
     }

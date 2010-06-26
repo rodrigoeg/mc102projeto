@@ -6,6 +6,33 @@
 
 #define LARGURA_TELA 640
 #define ALTURA_TELA 480
+void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int fase_atual) {
+    static int sequencia = 0;
+    int y, x;
+    int mat[5];
+    int parar = FALSE;
+    fase_funcao(mat, fase_atual);
+
+    printf("\n\n\n");
+    for (y = 0; ((y < TILES_Y) && (parar != TRUE)); y++) {
+        for (x = 0; ((x < TILES_X) && (parar != TRUE)); x++) {
+            printf("%c ", fases_cenario[fase_atual][FUNDO][x][y]);
+            if ((char) fases_cenario[fase_atual][FUNDO][x][y] == 'P') { // Pacman
+                parar = TRUE;
+            }
+        }
+        printf("\n");
+    }
+
+
+    if (fases_cenario[fase_atual][FRENTE][x][y] == mat[sequencia]) {
+        fases_cenario[fase_atual][FRENTE][x][y] == -1;
+        sequencia++;
+        printf("fasdfa");
+    }
+
+}
+
 
 int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao, int fase_atual, int *frame) {
     int x = 0;
@@ -118,11 +145,15 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
             }
             break;
         }
+
+        if (key[KEY_ALT]) {
+            come_numero(fases_cenario, *fase_atual);
+        }
+
     } else buffer_teclado--;
 }
 
 int inicia_allegro() {
-
     // inicialize o sistema do Allegro
     allegro_init();
 
