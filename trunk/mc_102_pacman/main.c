@@ -12,6 +12,7 @@ void anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao
     int y = 0;
     int posicao_x, posicao_y;
 
+
     for (y = 0; y < TILES_Y; y++) {
         for (x = 0; x < TILES_X; x++) {
             if ((char) fases_cenario[fase_atual][FUNDO][x][y] == 'P') { // Pacman
