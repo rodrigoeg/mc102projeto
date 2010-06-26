@@ -14,3 +14,21 @@
 	<allegro.h>
 	"carrega_fases.h"
 
+1277570878 source:c:\documents and settings\ra108231\meus documentos\mc102projeto\mc_102_pacman\carrega_fases.c
+	<stdio.h>
+	<stdlib.h>
+	<allegro.h>
+	"carrega_fases.h"
+
+1277576140 c:\documents and settings\ra108231\meus documentos\mc102projeto\mc_102_pacman\carrega_fases.h
+
+1277576711 source:c:\documents and settings\ra108231\meus documentos\mc102projeto\mc_102_pacman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<allegro.h>
+	"carrega_fases.h"
+
+1277577587 source:c:\documents and settings\ra108231\meus documentos\mc102projeto\mc_102_pacman\timer.c
+	<allegro.h>
+

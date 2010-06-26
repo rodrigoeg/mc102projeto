@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   carrega_fases.h
  * Author: User
  *
@@ -23,6 +23,9 @@
 void carrega_texturas(BITMAP *, BITMAP *[]);
 void carrega_matriz_jogo(int [QTDE_FASES][2][TILES_X][TILES_Y]);
 void atualiza_tela(BITMAP *, int, int [QTDE_FASES][2][TILES_X][TILES_Y], BITMAP *, BITMAP *[], int);
+void novo_contador(int);
+void contador();
+void update_timer(BITMAP *, BITMAP *);
 
 #endif	/* _CARREGA_FASES_H */
 
