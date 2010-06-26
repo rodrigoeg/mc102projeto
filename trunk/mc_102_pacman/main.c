@@ -111,7 +111,6 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
             anda_pacman(fases_cenario, DIR_RIGHT, *fase_atual);
             printf("right \n");
         }
-
     } else buffer_teclado--;
 }
 
@@ -180,7 +179,7 @@ int main() {
     int ultima_movimentacao = DIR_RIGHT;
 
     //Variável do tipo BITMAP responsável por guardar as texturas
-    BITMAP *pacman;
+    BITMAP *pacman, *numeros;
     BITMAP * texturas[3];
 
     BITMAP *buffer = NULL;
@@ -202,10 +201,18 @@ int main() {
     // Define o índice 2 da textura como sendo chão
     texturas[2] = load_bitmap("tiles/chao.bmp", NULL);
 
+    // Números
+    numeros = load_bitmap("imagens/numeros.bmp", NULL);
+
+    // Contador
+    install_int(contador, 1000);
+    novo_contador(120);
+
     while (!key[KEY_ESC]) {
         clear_bitmap(buffer);
         atualiza_tela(buffer, fase_atual, fases_cenario, pacman, texturas, ultima_movimentacao);
         teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao);
+        update_timer(buffer, numeros);
 
         textprintf_centre_ex(buffer, font, SCREEN_W / 2, (SCREEN_H / 2) - 10, makecol(255, 255, 0),
                 -1, "FASE: %d", fase_atual + 1);
