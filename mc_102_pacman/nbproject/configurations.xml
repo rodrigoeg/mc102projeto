@@ -5,12 +5,14 @@
                    displayName="Arquivos de cabeçalho"
                    projectFiles="true">
       <itemPath>carrega_fases.h</itemPath>
+      <itemPath>timer.h</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Arquivos de código-fonte"
                    projectFiles="true">
       <itemPath>carrega_fases.c</itemPath>
       <itemPath>main.c</itemPath>
+      <itemPath>timer.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Arquivos de recurso"

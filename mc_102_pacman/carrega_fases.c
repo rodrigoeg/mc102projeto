@@ -146,8 +146,7 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
                         break;
                 }
 
-            }
-            printf("\n");
+            }            
         }
 
         fclose(fp);
@@ -276,8 +275,7 @@ void fase_funcao(int mat[], int fase) {
 
             break;
     }
-
-    return mat;
+   
 }
 
 void fase_numeros_errados(int mat[], int fase) {
@@ -304,6 +302,5 @@ void fase_numeros_errados(int mat[], int fase) {
             break;
     }
 
-    return mat;
 }
 
