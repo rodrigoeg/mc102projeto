@@ -4,30 +4,6 @@
 #include "carrega_fases.h"
 
 /*
- struct dirent **namelist;
-int n;
-
-n = scandir(".", &namelist, 0, alphasort);
-if (n < 0)
-perror("scandir");
-else {
-while(n--) {
-printf("%s\n", namelist[n]->d_name);
-free(namelist[n]);
-}
-free(namelist);
-}
- */
-
-/*
-Com base nas variáveis acima temos o tamanho da tela 640x480, conforme abaixo:
-   (iTamTilesX * iTilesX) = SCREEN_W;
-   (iTamTilesY * iTilesY) = SCREEN_H;
-   (32 * 20) = 640;
-   (32 * 15) = 480;
- */
-
-/*
 A função abaixo é a mais importante com relação ao arquivo de fases. Ela serve
 para carregar os valores que estão dentro do arquivo de fase para a matriz.
 Com base na matriz iremos montar o cenário de cada fase e posicionar suas
@@ -50,7 +26,7 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
         int mat_erradas[5];
         fase_funcao(mat, fases);
         fase_numeros_errados(mat_erradas, fases);
-        char tile;
+        char tile = ' ';
 
         // Abre o arquivo de fases para leitura com base no iFase e o Array de fases
         FILE *fp = fopen(arq_fases[fases], "r");
@@ -65,10 +41,11 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
 
             fgets(char_count_linha, TAM_TILES_X, fp);
 
+
             /*
-               Já com o sLinha preenchido, agora, o FOR abaixo varre todas as
+               Já com o char_count_linha preenchido, agora, o FOR abaixo varre todas as
                posições dessa linha e acrescenta na linha da matriz. Após terminar
-               de varrer o sLinha sai do for e espera próxima linha, se houver.
+               de varrer o char_count_linha sai do for e espera próxima linha, se houver.
              */
 
 
@@ -79,74 +56,76 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
                 fases_cenario[fases][FUNDO][x][y] = char_count_linha[x];
 
 
-                if ((char) fases_cenario[fases][FUNDO][x + 1][y + 1] == '.') {
-                    tile = (char) fases_cenario[fases][FUNDO][x + 1][y + 1];
-                } else {
-                    if ((char) fases_cenario[fases][FUNDO][x][y + 1] == '.') {
-                        tile = (char) fases_cenario[fases][FUNDO][x][y + 1];
+                if (tile != ' ') {
+                    if ((char) fases_cenario[fases][FUNDO][x + 1][y + 1] == '.') {
+                        tile = (char) fases_cenario[fases][FUNDO][x + 1][y + 1];
                     } else {
-                        if ((char) fases_cenario[fases][FUNDO][x + 1][y] == '.') {
-                            tile = (char) fases_cenario[fases][FUNDO][x + 1][y];
+                        if ((char) fases_cenario[fases][FUNDO][x][y + 1] == '.') {
+                            tile = (char) fases_cenario[fases][FUNDO][x][y + 1];
+                        } else {
+                            if ((char) fases_cenario[fases][FUNDO][x + 1][y] == '.') {
+                                tile = (char) fases_cenario[fases][FUNDO][x + 1][y];
+                            }
+                        }
+                    }
+
+                    if ((char) fases_cenario[fases][FUNDO][x + 1][y + 1] == '-') {
+                        tile = fases_cenario[fases][FUNDO][x + 1][y + 1];
+                    } else {
+                        if ((char) fases_cenario[fases][FUNDO][x][y + 1] == '-') {
+                            tile = fases_cenario[fases][FUNDO][x][y + 1];
+                        } else {
+                            if ((char) fases_cenario[fases][FUNDO][x + 1][y] == '-') {
+                                tile = fases_cenario[fases][FUNDO][x + 1][y];
+                            }
                         }
                     }
                 }
 
-                if ((char) fases_cenario[fases][FUNDO][x + 1][y + 1] == '-') {
-                    tile = (char) fases_cenario[fases][FUNDO][x + 1][y + 1];
-                } else {
-                    if ((char) fases_cenario[fases][FUNDO][x][y + 1] == '-') {
-                        tile = (char) fases_cenario[fases][FUNDO][x][y + 1];
-                    } else {
-                        if ((char) fases_cenario[fases][FUNDO][x + 1][y] == '-') {
-                            tile = (char) fases_cenario[fases][FUNDO][x + 1][y];
-                        }
-                    }
-                }
-
-                switch(char_count_linha[x]) {
+                switch (char_count_linha[x]) {
                     case '0':
                         fases_cenario[fases][FRENTE][x][y] = mat[0];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case '1':
                         fases_cenario[fases][FRENTE][x][y] = mat[1];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case '2':
                         fases_cenario[fases][FRENTE][x][y] = mat[2];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case '3':
                         fases_cenario[fases][FRENTE][x][y] = mat[3];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case '4':
                         fases_cenario[fases][FRENTE][x][y] = mat[4];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case 'a':
                         fases_cenario[fases][FRENTE][x][y] = mat_erradas[0];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case 'b':
                         fases_cenario[fases][FRENTE][x][y] = mat_erradas[1];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case 'c':
                         fases_cenario[fases][FRENTE][x][y] = mat_erradas[2];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case 'd':
                         fases_cenario[fases][FRENTE][x][y] = mat_erradas[3];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                     case 'e':
                         fases_cenario[fases][FRENTE][x][y] = mat_erradas[4];
-                        fases_cenario[fases][FUNDO][x][y] = tile;
+                        fases_cenario[fases][FUNDO][x][y] = (int) tile;
                         break;
                 }
 
-            }            
+            }
         }
 
         fclose(fp);
@@ -158,7 +137,7 @@ A função abaixo é responsável por declarar e definir as imagens que iremos
 utilizar no Array Textura. Essa imagens devem estar dentro da pasta imagens no
 nosso projeto,caso contrário o programa irá apresentar a mensagem de erro fatal.
  */
-void carrega_texturas(BITMAP *pacman,BITMAP *pacman2, BITMAP *texturas[], BITMAP *numeros) {
+void carrega_texturas(BITMAP *pacman, BITMAP *pacman2, BITMAP *texturas[], BITMAP *numeros) {
 
     //carrega a imagem do pacman
     pacman = load_bitmap("imagens/pac-man.bmp", NULL);
@@ -250,57 +229,61 @@ void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES]
                 }
             }
             if ((fases_cenario[fase_atual][FRENTE][x][y] != -1) && (fases_cenario[fase_atual][FUNDO][x][y] != 'P')) {
-                 masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
+                masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
             }
         }
     }
 }
 
+//retorna a sequencia de numeros da fase
+
 void fase_funcao(int mat[], int fase) {
     int i;
-    switch (fase){
+    switch (fase) {
         case 0:
             //2x
-            for(i=0;i<5;i++) {
-                mat[i] = 2*i;
+            for (i = 0; i < 5; i++) {
+                mat[i] = 2 * i;
             }
             break;
         case 1:
             //2x + 1
-            for(i=0;i<5;i++) {
-                mat[i] = 2*i +1;
+            for (i = 0; i < 5; i++) {
+                mat[i] = 2 * i + 1;
             }
             break;
         case 2:
             //3x + 7
-            for(i=0;i<5;i++) {
-                mat[i] = 3*i + 7;
+            for (i = 0; i < 5; i++) {
+                mat[i] = 3 * i + 7;
             }
 
             break;
     }
-   
+
 }
+
+//retorna a sequencia de numeros errados na fase
 
 void fase_numeros_errados(int mat[], int fase) {
     int i;
-    switch (fase){
+    switch (fase) {
         case 0:
             //2x + 1
-            for(i=0;i<5;i++) {
-                mat[i] = 2*i + 1;
+            for (i = 0; i < 5; i++) {
+                mat[i] = 2 * i + 1;
             }
             break;
         case 1:
             //2x
-            for(i=0;i<5;i++) {
-                mat[i] = 2*i;
+            for (i = 0; i < 5; i++) {
+                mat[i] = 2 * i;
             }
             break;
         case 2:
             //3x + 3
-            for(i=0;i<5;i++) {
-                mat[i] = 3*i + 3;
+            for (i = 0; i < 5; i++) {
+                mat[i] = 3 * i + 3;
             }
 
             break;

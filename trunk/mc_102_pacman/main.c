@@ -8,8 +8,10 @@
 #define LARGURA_TELA 640
 #define ALTURA_TELA 480
 
+//definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
 
+//apaga o numero da matri e verifica se a numero é da sequencia da funcao
 void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int fase_atual) {
     static int sequencia = 0;
     int y, x;
