@@ -130,6 +130,13 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
 
         fclose(fp);
     }
+
+    /*for (y = 0; y < TILES_Y; y++) {
+         for (x = 0; x < TILES_X; x++) {
+             printf("%d " ,fases_cenario[2][FRENTE][x][y]);
+         }
+         printf("\n");
+    }*/
 }
 
 /*
@@ -255,7 +262,7 @@ void fase_funcao(int mat[], int fase) {
         case 2:
             //3x + 7
             for (i = 0; i < 5; i++) {
-                mat[i] = 3 * i + 7;
+                mat[i] = i + 2;
             }
 
             break;
@@ -283,7 +290,7 @@ void fase_numeros_errados(int mat[], int fase) {
         case 2:
             //3x + 3
             for (i = 0; i < 5; i++) {
-                mat[i] = 3 * i + 3;
+                mat[i] = i+5;
             }
 
             break;
