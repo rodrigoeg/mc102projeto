@@ -12,42 +12,55 @@
 volatile int close_button_pressed = FALSE;
 
 //apaga o numero da matri e verifica se a numero é da sequencia da funcao
-void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int fase_atual) {
+
+void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual) {
     static int sequencia = 0;
     int y, x;
     int i;
     int mat[5];
     int parar = FALSE;
-    fase_funcao(mat, fase_atual);
+    fase_funcao(mat, *fase_atual);
 
     for (y = 0; ((y < TILES_Y) && (parar != TRUE)); y++) {
         for (x = 0; ((x < TILES_X) && (parar != TRUE)); x++) {
-            if ((char) fases_cenario[fase_atual][FUNDO][x][y] == 'P') { // Pacman
+            if ((char) fases_cenario[*fase_atual][FUNDO][x][y] == 'P') { // Pacman
                 parar = TRUE;
             }
         }
     }
 
-    if (fases_cenario[fase_atual][FRENTE][x-1][y-1] ==  mat[sequencia]) {
-        fases_cenario[fase_atual][FRENTE][x-1][y-1] = -1;
+    if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] == mat[sequencia]) {
+        fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] = -1;
         sequencia++;
         printf("acertou \n");
+
         //ganha pontos
-    } else{
-        if(fases_cenario[fase_atual][FRENTE][x-1][y-1] != -1) {
-            for(i=0;i<5;i++) {
-                if(fases_cenario[fase_atual][FRENTE][x-1][y-1] == mat[i]){
+    } else {
+        if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] != -1) {
+            for (i = 0; i < 5; i++) {
+                if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] == mat[i]) {
                     sequencia++;
                     break;
                 }
             }
-            fases_cenario[fase_atual][FRENTE][x-1][y-1] = -1;
+            fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] = -1;
             printf("errou \n");
             //perde pontos
         }
     }
-}
 
+    //TODO trocar para uma constante
+    if (sequencia == 5) {
+        //TODO trocar para uma constante
+        if (*fase_atual < 3) {
+            *fase_atual = *fase_atual + 1;
+            sequencia = 0;
+        } else{
+            //TODO final do jogo
+            allegro_message("Final do jogo");
+        }        
+    }
+}
 
 int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao, int fase_atual, int *frame) {
     int x = 0;
@@ -71,7 +84,7 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
             if (fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1] != '#') {
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1];
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y - 1] = 'P';
-                *frame = (*frame+1)%2;
+                *frame = (*frame + 1) % 2;
                 return 1;
             }
             break;
@@ -79,7 +92,7 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
             if (fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1] != '#') {
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1];
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y + 1] = 'P';
-                *frame = (*frame+1)%2;
+                *frame = (*frame + 1) % 2;
                 return 1;
             }
             break;
@@ -87,7 +100,7 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
             if (fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y] != '#') {
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y];
                 fases_cenario[fase_atual][FUNDO][posicao_x - 1][posicao_y] = 'P';
-                *frame = (*frame+1)%2;
+                *frame = (*frame + 1) % 2;
                 return 1;
             }
             break;
@@ -95,7 +108,7 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
             if (fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y] != '#') {
                 fases_cenario[fase_atual][FUNDO][posicao_x][posicao_y] = fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y];
                 fases_cenario[fase_atual][FUNDO][posicao_x + 1][posicao_y] = 'P';
-                *frame = (*frame+1)%2;
+                *frame = (*frame + 1) % 2;
                 return 1;
             }
             break;
@@ -162,7 +175,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
         }
 
         if (key[KEY_ALT]) {
-            come_numero(fases_cenario, *fase_atual);
+            come_numero(fases_cenario, fase_atual);
         }
 
     } else buffer_teclado--;
@@ -219,6 +232,7 @@ void close_button_handler(void) //Permite a utilização do botão "Fechar" para
 {
     close_button_pressed = TRUE;
 }
+
 END_OF_FUNCTION(close_button_handler)
 
 int main() {
@@ -244,7 +258,7 @@ int main() {
 
     //Variável do tipo BITMAP responsável por guardar as texturas
     BITMAP *pacman, *pacman2, *numeros;
-    BITMAP *texturas[3];
+    BITMAP * texturas[3];
 
     BITMAP *buffer = NULL;
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
@@ -253,7 +267,7 @@ int main() {
     //carrega_texturas(pacman, pacman2, texturas, numeros);
 
 
-   //carrega a imagem do pacman
+    //carrega a imagem do pacman
     pacman = load_bitmap("imagens/pac-man.bmp", NULL);
     pacman2 = load_bitmap("imagens/pac-man2.bmp", NULL);
 
