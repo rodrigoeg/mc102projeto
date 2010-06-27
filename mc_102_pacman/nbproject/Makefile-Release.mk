@@ -32,6 +32,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/carrega_fases.o \
+	${OBJECTDIR}/timer.o \
 	${OBJECTDIR}/main.o
 
 # C Compiler Flags
@@ -62,6 +63,11 @@ ${OBJECTDIR}/carrega_fases.o: nbproject/Makefile-${CND_CONF}.mk carrega_fases.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/carrega_fases.o carrega_fases.c
+
+${OBJECTDIR}/timer.o: nbproject/Makefile-${CND_CONF}.mk timer.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/timer.o timer.c
 
 ${OBJECTDIR}/main.o: nbproject/Makefile-${CND_CONF}.mk main.c 
 	${MKDIR} -p ${OBJECTDIR}

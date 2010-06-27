@@ -242,16 +242,16 @@ int main() {
 
     //Variável do tipo BITMAP responsável por guardar as texturas
     BITMAP *pacman, *pacman2, *numeros;
-    BITMAP * texturas[3];
+    BITMAP *texturas[3];
 
     BITMAP *buffer = NULL;
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
     carrega_matriz_jogo(fases_cenario);
-    //carrega_texturas(pacman, texturas);
+    //carrega_texturas(pacman, pacman2, texturas, numeros);
 
 
-    //carrega a imagem do pacman
+   //carrega a imagem do pacman
     pacman = load_bitmap("imagens/pac-man.bmp", NULL);
     pacman2 = load_bitmap("imagens/pac-man2.bmp", NULL);
 

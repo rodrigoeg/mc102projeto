@@ -20,7 +20,7 @@
 #define DIR_LEFT 2
 #define DIR_RIGHT 3
 
-void carrega_texturas(BITMAP *, BITMAP *[]);
+void carrega_texturas(BITMAP *, BITMAP *, BITMAP *[], BITMAP *);
 void carrega_matriz_jogo(int [QTDE_FASES][2][TILES_X][TILES_Y]);
 void atualiza_tela(BITMAP *, int, int [QTDE_FASES][2][TILES_X][TILES_Y], BITMAP *, BITMAP *[], int, BITMAP *);
 

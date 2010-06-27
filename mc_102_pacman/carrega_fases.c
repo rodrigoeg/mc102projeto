@@ -158,10 +158,11 @@ A função abaixo é responsável por declarar e definir as imagens que iremos
 utilizar no Array Textura. Essa imagens devem estar dentro da pasta imagens no
 nosso projeto,caso contrário o programa irá apresentar a mensagem de erro fatal.
  */
-void carrega_texturas(BITMAP *pacman, BITMAP *texturas[]) {
+void carrega_texturas(BITMAP *pacman,BITMAP *pacman2, BITMAP *texturas[], BITMAP *numeros) {
 
     //carrega a imagem do pacman
     pacman = load_bitmap("imagens/pac-man.bmp", NULL);
+    pacman2 = load_bitmap("imagens/pac-man2.bmp", NULL);
 
     // Define o índice 0 da textura como sendo parede
     texturas[0] = load_bitmap("tiles/parede.bmp", NULL);
@@ -171,6 +172,9 @@ void carrega_texturas(BITMAP *pacman, BITMAP *texturas[]) {
 
     // Define o índice 2 da textura como sendo chão
     texturas[2] = load_bitmap("tiles/chao.bmp", NULL);
+
+    // Números
+    numeros = load_bitmap("imagens/numeros.bmp", NULL);
 
 }
 
