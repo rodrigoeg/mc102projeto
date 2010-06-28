@@ -2,18 +2,63 @@
 #include <stdlib.h>
 #include <time.h>
 #include <allegro.h>
+#include <math.h>
 #include "carrega_fases.h"
 #include "timer.h"
 
 #define LARGURA_TELA 640
 #define ALTURA_TELA 480
 
+//Estados do jogo
+#define MENU 0
+#define INSTRUCOES 1
+#define JOGO 2
+#define FINAL 3
+#define BUFFER_TECLADO 40
+
 //definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
 
-//apaga o numero da matri e verifica se a numero é da sequencia da funcao
+void update_score(BITMAP *buffer, BITMAP *numeros, int score) {
+    int num;
+    int digitos = 1;
+    int digitos_inicial = 1;
 
-void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual) {
+    if (score < 0) {
+        //colocar sinal de menos
+        masked_blit(numeros, buffer, 0, (10)*30, 380, 0, numeros->w, 27);
+        score = -score;
+    }
+
+    num = score;
+    while (num / 10 > 0) {
+        num /= 10;
+        digitos++;
+    }
+
+    digitos_inicial = digitos;
+
+    while (digitos > 0) {
+        if (digitos > 1) {
+            masked_blit(numeros, buffer, 0, (int)(score / ((digitos - 1)*10))*30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
+            score -= ((digitos-1) * 10 *((int)(score / ((digitos - 1)*10))));
+        } else {
+            
+            masked_blit(numeros, buffer, 0, score * 30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
+        }
+
+        digitos--;
+    }
+}
+
+int calcula_score(int pontos, int total) {
+    printf("%d, %d \n", pontos, total);
+    return pontos + total;
+}
+
+//apaga o numero da matriz e verifica se a numero é da sequencia da funcao
+
+void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *estado_jogo, int *score) {
     static int sequencia = 0;
     int y, x;
     int i;
@@ -31,9 +76,9 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
 
     if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] == mat[sequencia]) {
         fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] = -1;
+        *score = calcula_score(mat[sequencia], *score);
         sequencia++;
         printf("acertou \n");
-
         //ganha pontos
     } else {
         if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] != -1) {
@@ -43,6 +88,7 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
                     break;
                 }
             }
+            *score = calcula_score(-(fases_cenario[*fase_atual][FRENTE][x - 1][y - 1]), *score);
             fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] = -1;
             printf("errou \n");
             //perde pontos
@@ -52,13 +98,14 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
     //TODO trocar para uma constante
     if (sequencia == 5) {
         //TODO trocar para uma constante
-        if (*fase_atual < 3) {
+        if (*fase_atual < 2) {
             *fase_atual = *fase_atual + 1;
             sequencia = 0;
-        } else{
+        } else {
             //TODO final do jogo
-            allegro_message("Final do jogo");
-        }        
+            //allegro_message("Final do jogo");
+            *estado_jogo = FINAL;
+        }
     }
 }
 
@@ -120,7 +167,7 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
 A função abaixo é responsável por controlar as entradas do teclado, qualquer
 tecla pressionada durante a execução do jogo.
  */
-void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *full_screen, int *ultima_movimentacao, int *frame) {
+void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *full_screen, int *ultima_movimentacao, int *frame, int *estado_jogo, int *score) {
     /*
     Quando declaramos uma variável como sendo static quer dizer que mesmo saindo
     da função ela não vai perder o valor dela. Dessa forma, utilizamos a variável
@@ -148,26 +195,26 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
             else
                 *fase_atual = 0;
 
-            buffer_teclado = 15;
+            buffer_teclado = BUFFER_TECLADO;
         }
         while (keypressed()) {
             if (key[KEY_UP]) {
-                buffer_teclado = 15;
+                buffer_teclado = BUFFER_TECLADO;
                 *ultima_movimentacao = DIR_UP;
                 if (anda_pacman(fases_cenario, DIR_UP, *fase_atual, frame)) break;
             }
             if (key[KEY_LEFT]) {
-                buffer_teclado = 15;
+                buffer_teclado = BUFFER_TECLADO;
                 *ultima_movimentacao = DIR_LEFT;
                 if (anda_pacman(fases_cenario, DIR_LEFT, *fase_atual, frame)) break;
             }
             if (key[KEY_RIGHT]) {
-                buffer_teclado = 15;
+                buffer_teclado = BUFFER_TECLADO;
                 *ultima_movimentacao = DIR_RIGHT;
                 if (anda_pacman(fases_cenario, DIR_RIGHT, *fase_atual, frame)) break;
             }
             if (key[KEY_DOWN]) {
-                buffer_teclado = 15;
+                buffer_teclado = BUFFER_TECLADO;
                 *ultima_movimentacao = DIR_DOWN;
                 if (anda_pacman(fases_cenario, DIR_DOWN, *fase_atual, frame)) break;
             }
@@ -175,7 +222,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
         }
 
         if (key[KEY_ALT]) {
-            come_numero(fases_cenario, fase_atual);
+            come_numero(fases_cenario, fase_atual, estado_jogo, score);
         }
 
     } else buffer_teclado--;
@@ -207,7 +254,7 @@ int inicia_allegro() {
         return FALSE;
     }
 
-    set_window_title("Pacman");
+    set_window_title("Nancap");
 
     return TRUE;
 }
@@ -235,22 +282,22 @@ void close_button_handler(void) //Permite a utilização do botão "Fechar" para
 
 END_OF_FUNCTION(close_button_handler)
 
-int main() {
+void inicia_jogo() {
 
+    //TODO mudar comentarios
     /*
          Variáveis Mapa tridimensional sendo o primeiro ecrãn a Fase e os
         outros dois correspondem a quantidade de Tiles na horizontal e vertical.
      */
 
-    if (!inicia_allegro()) {
-        return EXIT_FAILURE;
-    }
 
     int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y];
     int fase_atual = 0; // Guarda o index da fase atual.
     int full_screen = FALSE;
     int ultima_movimentacao = DIR_RIGHT;
     int frame;
+    int estado_jogo = JOGO;
+    int score = 0;
 
     LOCK_FUNCTION(close_button_handler);
     set_close_button_callback(close_button_handler);
@@ -288,18 +335,31 @@ int main() {
     novo_contador(120);
 
     while (!key[KEY_ESC] && !close_button_pressed) {
-        clear_bitmap(buffer);
-        atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
-        teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame);
-        update_timer(buffer, numeros);
+        switch (estado_jogo) {
+            case MENU:
+                break;
+            case INSTRUCOES:
+                break;
+            case JOGO:
+                clear_bitmap(buffer);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score);
+                atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
+                update_timer(buffer, numeros);
+                update_score(buffer, numeros, score);
 
-        textprintf_centre_ex(buffer, font, SCREEN_W / 2, (SCREEN_H / 2) - 10, makecol(255, 255, 0),
-                -1, "FASE: %d", fase_atual + 1);
-        textprintf_centre_ex(buffer, font, SCREEN_W / 2, SCREEN_H / 2, makecol(255, 255, 0), -1,
-                "Pressione espaço para mudar de fase.");
+                textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
+                        -1, "FASE: %d", fase_atual + 1);
+                /*
+                        textprintf_centre_ex(buffer, font, SCREEN_W / 2, SCREEN_H / 2, makecol(255, 255, 0), -1,
+                                "Pressione espaço para mudar de fase.");
+                 */
+                break;
+            case FINAL:
+                break;
+        }
 
+        //vsync();
         blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
-        vsync();
     }
 
     //Desaloca as imagens da memória
@@ -307,6 +367,15 @@ int main() {
     destroy_bitmap(texturas[0]);
     destroy_bitmap(texturas[1]);
     destroy_bitmap(texturas[2]);
+}
+
+int main() {
+
+    if (!inicia_allegro()) {
+        return EXIT_FAILURE;
+    }
+
+    inicia_jogo();
     allegro_exit();
 
     return EXIT_SUCCESS;
