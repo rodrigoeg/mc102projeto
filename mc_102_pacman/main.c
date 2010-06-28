@@ -19,7 +19,7 @@
 //definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
 
-void update_score(BITMAP *buffer, BITMAP *numeros, int score) {
+void update_score(BITMAP *buffer, BITMAP *numeros, BITMAP *score_bmp, int score) {
     int num;
     int digitos = 1;
     int digitos_inicial = 1;
@@ -40,15 +40,17 @@ void update_score(BITMAP *buffer, BITMAP *numeros, int score) {
 
     while (digitos > 0) {
         if (digitos > 1) {
-            masked_blit(numeros, buffer, 0, (int)(score / ((digitos - 1)*10))*30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
-            score -= ((digitos-1) * 10 *((int)(score / ((digitos - 1)*10))));
+            masked_blit(numeros, buffer, 0, (int) (score / ((digitos - 1)*10))*30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
+            score -= ((digitos - 1) * 10 * ((int) (score / ((digitos - 1)*10))));
         } else {
-            
+
             masked_blit(numeros, buffer, 0, score * 30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
         }
 
         digitos--;
     }
+
+    draw_sprite(buffer, score_bmp, 280, 0);
 }
 
 int calcula_score(int pontos, int total) {
@@ -304,7 +306,7 @@ void inicia_jogo() {
 
 
     //Variável do tipo BITMAP responsável por guardar as texturas
-    BITMAP *pacman, *pacman2, *numeros;
+    BITMAP *pacman, *pacman2, *numeros, *score_bmp, *score_back;
     BITMAP * texturas[3];
 
     BITMAP *buffer = NULL;
@@ -330,6 +332,10 @@ void inicia_jogo() {
     // Números
     numeros = load_bitmap("imagens/numeros.bmp", NULL);
 
+    //Score image
+    score_bmp = load_bitmap("imagens/score.bmp", NULL);
+    score_back = load_bitmap("imagens/score-back.bmp", NULL);
+
     // Contador
     install_int(contador, 1000);
     novo_contador(120);
@@ -344,8 +350,13 @@ void inicia_jogo() {
                 clear_bitmap(buffer);
                 teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score);
                 atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
-                update_timer(buffer, numeros);
-                update_score(buffer, numeros, score);
+                draw_sprite(buffer, score_back, 0, 0);
+
+                update_score(buffer, numeros, score_bmp, score);
+
+                if (update_timer(buffer, numeros) == FALSE) {
+                    estado_jogo = FINAL;
+                }
 
                 textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
                         -1, "FASE: %d", fase_atual + 1);

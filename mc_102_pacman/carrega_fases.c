@@ -258,9 +258,6 @@ void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES]
 
                     digitos--;
                 }
-
-
-                //masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
             }
         }
     }
@@ -286,7 +283,7 @@ void fase_funcao(int mat[], int fase) {
         case 2:
             //3x + 7
             for (i = 0; i < 5; i++) {
-                mat[i] = 3*i + 2;
+                mat[i] = 3 * i + 2;
             }
 
             break;
@@ -314,7 +311,7 @@ void fase_numeros_errados(int mat[], int fase) {
         case 2:
             //3x + 3
             for (i = 0; i < 5; i++) {
-                mat[i] = 3*i + 3;
+                mat[i] = 3 * i + 3;
             }
 
             break;
