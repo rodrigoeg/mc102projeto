@@ -236,7 +236,31 @@ void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES]
                 }
             }
             if ((fases_cenario[fase_atual][FRENTE][x][y] != -1) && (fases_cenario[fase_atual][FUNDO][x][y] != 'P')) {
-                masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
+                int num = fases_cenario[fase_atual][FRENTE][x][y];
+                int digitos = 1;
+                int digitos_inicial = 1;
+                while (num / 10 > 0) {
+                    num /= 10;
+                    digitos++;
+                }
+
+                num = fases_cenario[fase_atual][FRENTE][x][y];
+
+                digitos_inicial = digitos;
+
+                while (digitos > 0) {
+                    if (digitos > 1) {
+                        masked_blit(sheet, buffer, 0, (int) (num / ((digitos - 1)*10))*30, (digitos_inicial - digitos)*15 + x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
+                        num -= ((digitos - 1) * 10 * ((int) (num / ((digitos - 1)*10))));
+                    } else {
+                        masked_blit(sheet, buffer, 0, num * 30, (digitos_inicial - digitos)*15 + x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
+                    }
+
+                    digitos--;
+                }
+
+
+                //masked_blit(sheet, buffer, 0, (fases_cenario[fase_atual][FRENTE][x][y])*30, x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
             }
         }
     }
@@ -262,7 +286,7 @@ void fase_funcao(int mat[], int fase) {
         case 2:
             //3x + 7
             for (i = 0; i < 5; i++) {
-                mat[i] = i + 2;
+                mat[i] = 3*i + 2;
             }
 
             break;
@@ -290,7 +314,7 @@ void fase_numeros_errados(int mat[], int fase) {
         case 2:
             //3x + 3
             for (i = 0; i < 5; i++) {
-                mat[i] = i+5;
+                mat[i] = 3*i + 3;
             }
 
             break;
