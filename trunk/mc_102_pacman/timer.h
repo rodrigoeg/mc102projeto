@@ -3,6 +3,6 @@
 
 void novo_contador(int);
 void contador();
-void update_timer(BITMAP *, BITMAP *);
+int update_timer(BITMAP *, BITMAP *);
 
 #endif // TIMER_H_INCLUDED
