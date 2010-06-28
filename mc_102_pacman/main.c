@@ -5,6 +5,7 @@
 #include <math.h>
 #include "carrega_fases.h"
 #include "timer.h"
+#include "score.h"
 
 #define LARGURA_TELA 640
 #define ALTURA_TELA 480
@@ -112,47 +113,7 @@ void final_jogo(BITMAP *buffer, BITMAP *final, BITMAP *numeros, int score) {
     }
 }
 
-void update_score(BITMAP *buffer, BITMAP *numeros, BITMAP *score_bmp, int score) {
-    int num;
-    int digitos = 1;
-    int digitos_inicial = 1;
-
-    if (score < 0) {
-        //colocar sinal de menos
-        masked_blit(numeros, buffer, 0, (10)*30, 380, 0, numeros->w, 27);
-        score = -score;
-    }
-
-    num = score;
-    while (num / 10 > 0) {
-        num /= 10;
-        digitos++;
-    }
-
-    digitos_inicial = digitos;
-
-    while (digitos > 0) {
-        if (digitos > 1) {
-            masked_blit(numeros, buffer, 0, (int) (score / ((digitos - 1)*10))*30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
-            score -= ((digitos - 1) * 10 * ((int) (score / ((digitos - 1)*10))));
-        } else {
-
-            masked_blit(numeros, buffer, 0, score * 30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
-        }
-
-        digitos--;
-    }
-
-    draw_sprite(buffer, score_bmp, 280, 0);
-}
-
-int calcula_score(int pontos, int total) {
-    printf("%d, %d \n", pontos, total);
-    return pontos + total;
-}
-
 //apaga o numero da matriz e verifica se a numero é da sequencia da funcao
-
 void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *estado_jogo, int *score) {
     static int sequencia = 0;
     int y, x;
@@ -569,10 +530,10 @@ int main() {
     if (!inicia_allegro()) {
         return EXIT_FAILURE;
     }
-
     inicia_jogo();
     allegro_exit();
 
     return EXIT_SUCCESS;
 }
 END_OF_MAIN();
+
