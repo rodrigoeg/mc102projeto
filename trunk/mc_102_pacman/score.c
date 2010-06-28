@@ -4,7 +4,7 @@
 #include "carrega_fases.h"
 #include <string.h>
 
-int le_score(int scores[10]) {
+void le_score(int scores[10]) {
     int i = 0;
 
     char char_count_linha[100];
@@ -18,13 +18,14 @@ int le_score(int scores[10]) {
         fgets(char_count_linha, 100, fp);
 
         char delims[] = "|";
-        
+
         strtok(char_count_linha, delims);
         result = strtok(NULL, delims);
         scores[i] = atoi(result);
     }
 
-    fclose(fp); 
+    fclose(fp);
+
 }
 
 void salva_score(int scores[10]) {
@@ -45,7 +46,7 @@ void salva_score(int scores[10]) {
         scores[i] = atoi(result);
     }
 
-    fclose(fp);    
+    fclose(fp);
 }
 
 void update_score(BITMAP *buffer, BITMAP *numeros, BITMAP *score_bmp, int score) {
