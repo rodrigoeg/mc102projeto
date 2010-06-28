@@ -11,13 +11,106 @@
 
 //Estados do jogo
 #define MENU 0
-#define INSTRUCOES 1
-#define JOGO 2
-#define FINAL 3
+#define MENU_SELECIONAR_FASE 1
+#define MENU_INSTRUCOES 2
+#define JOGO 3
+#define FINAL 4
+#define SAIR 5
+#define PAUSADO 6
+
+#define TEMPO_FASE 120
+
 #define BUFFER_TECLADO 40
 
 //definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
+
+void menu_inicial_jogo(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionado, int *estado_jogo, int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *score) {
+
+    if (*botao_mouse_pressionado == FALSE) {
+        if (mouse_b & 1) {
+            *botao_mouse_pressionado = TRUE;
+        }
+    } else {
+        if (!(mouse_b & 1)) {
+            *botao_mouse_pressionado = FALSE;
+            if ((mouse_x > 230 && mouse_x < 390) && (mouse_y > 280 && mouse_y < 305)) {
+                *estado_jogo = JOGO;
+                carrega_matriz_jogo(fases_cenario);
+                // Contador
+                install_int(contador, 1000);
+                novo_contador(TEMPO_FASE);
+                *fase_atual = 0;
+                *score = 0;
+            }
+
+            if ((mouse_x > 195 && mouse_x < 430) && (mouse_y > 320 && mouse_y < 340)) {
+                *estado_jogo = MENU_SELECIONAR_FASE;
+            }
+
+            if ((mouse_x > 240 && mouse_x < 380) && (mouse_y > 355 && mouse_y < 375)) {
+                *estado_jogo = MENU_INSTRUCOES;
+            }
+
+            if ((mouse_x > 280 && mouse_x < 340) && (mouse_y > 390 && mouse_y < 410)) {
+                *estado_jogo = SAIR;
+            }
+
+        }
+    }
+    draw_sprite(buffer, menu, 0, 0);
+}
+
+void menu_jogo(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionado, int *estado_jogo) {
+    if (*botao_mouse_pressionado == FALSE) {
+        if (mouse_b & 1) {
+            *botao_mouse_pressionado = TRUE;
+        }
+    } else {
+        if (!(mouse_b & 1)) {
+            *botao_mouse_pressionado = FALSE;
+
+            if ((mouse_x > 20 && mouse_x < 100) && (mouse_y > 440 && mouse_y < 460)) {
+                *estado_jogo = MENU;
+            }
+        }
+    }
+    draw_sprite(buffer, menu, 0, 0);
+}
+
+void final_jogo(BITMAP *buffer, BITMAP *final, BITMAP *numeros, int score) {
+    int num;
+    int digitos = 1;
+    int digitos_inicial = 1;
+
+    draw_sprite(buffer, final, 0, 0);
+
+    if (score < 0) {
+        //colocar sinal de menos
+        masked_blit(numeros, buffer, 0, (10)*30, 265, 185, numeros->w, 27);
+        score = -score;
+    }
+
+    num = score;
+    while (num / 10 > 0) {
+        num /= 10;
+        digitos++;
+    }
+
+    digitos_inicial = digitos;
+
+    while (digitos > 0) {
+        if (digitos > 1) {
+            masked_blit(numeros, buffer, 0, (int) (score / ((digitos - 1)*10))*30, (digitos_inicial - digitos)*20 + 285, 185, numeros->w, 27);
+            score -= ((digitos - 1) * 10 * ((int) (score / ((digitos - 1)*10))));
+        } else {
+
+            masked_blit(numeros, buffer, 0, score * 30, (digitos_inicial - digitos)*20 + 285, 185, numeros->w, 27);
+        }
+
+        digitos--;
+    }
+}
 
 void update_score(BITMAP *buffer, BITMAP *numeros, BITMAP *score_bmp, int score) {
     int num;
@@ -100,9 +193,10 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
     //TODO trocar para uma constante
     if (sequencia == 5) {
         //TODO trocar para uma constante
-        if (*fase_atual < 2) {
+        if (*fase_atual < QTDE_FASES - 1) {
             *fase_atual = *fase_atual + 1;
             sequencia = 0;
+            novo_contador(TEMPO_FASE);
         } else {
             //TODO final do jogo
             //allegro_message("Final do jogo");
@@ -180,51 +274,75 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
     //Tudo que estiver dentro o IF abaixo será executado a cada 30 ciclos de CPU
     if (buffer_teclado == 0) {
         //fullscreen mode
+
         if (key[KEY_ALT] && key[KEY_ENTER]) {
 
             if (*full_screen == TRUE) {
                 set_windowed();
+                show_mouse(screen);
             } else {
-                set_full_screen();
+                set_full_screen();                
             }
+            
             *full_screen = (*full_screen == TRUE) ? FALSE : TRUE;
         }
 
-        // Muda o Cenário caso aperte a tecla espaço
-        if (key[KEY_SPACE]) {
-            if (*fase_atual < (QTDE_FASES - 1))
-                *fase_atual = *fase_atual + 1;
-            else
-                *fase_atual = 0;
+        if ((*estado_jogo == JOGO) || (*estado_jogo == PAUSADO)) {
+            // Muda o Cenário caso aperte a tecla espaço
+            if (key[KEY_SPACE]) {
+                if (*fase_atual < (QTDE_FASES - 1))
+                    *fase_atual = *fase_atual + 1;
+                else
+                    *fase_atual = 0;
 
-            buffer_teclado = BUFFER_TECLADO;
-        }
-        while (keypressed()) {
-            if (key[KEY_UP]) {
                 buffer_teclado = BUFFER_TECLADO;
-                *ultima_movimentacao = DIR_UP;
-                if (anda_pacman(fases_cenario, DIR_UP, *fase_atual, frame)) break;
             }
-            if (key[KEY_LEFT]) {
-                buffer_teclado = BUFFER_TECLADO;
-                *ultima_movimentacao = DIR_LEFT;
-                if (anda_pacman(fases_cenario, DIR_LEFT, *fase_atual, frame)) break;
-            }
-            if (key[KEY_RIGHT]) {
-                buffer_teclado = BUFFER_TECLADO;
-                *ultima_movimentacao = DIR_RIGHT;
-                if (anda_pacman(fases_cenario, DIR_RIGHT, *fase_atual, frame)) break;
-            }
-            if (key[KEY_DOWN]) {
-                buffer_teclado = BUFFER_TECLADO;
-                *ultima_movimentacao = DIR_DOWN;
-                if (anda_pacman(fases_cenario, DIR_DOWN, *fase_atual, frame)) break;
-            }
-            break;
-        }
 
-        if (key[KEY_ALT]) {
-            come_numero(fases_cenario, fase_atual, estado_jogo, score);
+            // Muda o Cenário caso aperte a tecla espaço
+            if (key[KEY_P]) {
+                if (*estado_jogo == JOGO) {
+                    *estado_jogo = PAUSADO;
+                    remove_int(contador);
+                } else {
+                    if (*estado_jogo == PAUSADO) {
+                        *estado_jogo = JOGO;
+                        install_int(contador, 1000);
+                    }
+                }
+                buffer_teclado = BUFFER_TECLADO;
+            }
+
+            if (key[KEY_V]) {
+                *estado_jogo = MENU;
+            }
+
+            while (keypressed()) {
+                if (key[KEY_UP]) {
+                    buffer_teclado = BUFFER_TECLADO;
+                    *ultima_movimentacao = DIR_UP;
+                    if (anda_pacman(fases_cenario, DIR_UP, *fase_atual, frame)) break;
+                }
+                if (key[KEY_LEFT]) {
+                    buffer_teclado = BUFFER_TECLADO;
+                    *ultima_movimentacao = DIR_LEFT;
+                    if (anda_pacman(fases_cenario, DIR_LEFT, *fase_atual, frame)) break;
+                }
+                if (key[KEY_RIGHT]) {
+                    buffer_teclado = BUFFER_TECLADO;
+                    *ultima_movimentacao = DIR_RIGHT;
+                    if (anda_pacman(fases_cenario, DIR_RIGHT, *fase_atual, frame)) break;
+                }
+                if (key[KEY_DOWN]) {
+                    buffer_teclado = BUFFER_TECLADO;
+                    *ultima_movimentacao = DIR_DOWN;
+                    if (anda_pacman(fases_cenario, DIR_DOWN, *fase_atual, frame)) break;
+                }
+                break;
+            }
+
+            if (key[KEY_ALT]) {
+                come_numero(fases_cenario, fase_atual, estado_jogo, score);
+            }
         }
 
     } else buffer_teclado--;
@@ -239,6 +357,13 @@ int inicia_allegro() {
     install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL);
 
     install_timer();
+
+    install_mouse();
+
+    enable_hardware_cursor();
+
+    // Set normal arrow pointer
+    select_mouse_cursor(MOUSE_CURSOR_ARROW);
 
     //Habilita Acentuação
     set_uformat(U_UTF8);
@@ -298,21 +423,22 @@ void inicia_jogo() {
     int full_screen = FALSE;
     int ultima_movimentacao = DIR_RIGHT;
     int frame;
-    int estado_jogo = JOGO;
+    int estado_jogo = MENU;
     int score = 0;
+    int botao_mouse_pressionado = FALSE;
 
     LOCK_FUNCTION(close_button_handler);
     set_close_button_callback(close_button_handler);
 
 
     //Variável do tipo BITMAP responsável por guardar as texturas
-    BITMAP *pacman, *pacman2, *numeros, *score_bmp, *score_back;
+    BITMAP *pacman, *pacman2, *numeros, *score_bmp, *score_back, *final, *menu, *menu_instrucoes, *menu_selecionar_fase, *jogo_pausado;
     BITMAP * texturas[3];
 
     BITMAP *buffer = NULL;
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
-    carrega_matriz_jogo(fases_cenario);
+    //carrega_matriz_jogo(fases_cenario);
     //carrega_texturas(pacman, pacman2, texturas, numeros);
 
 
@@ -336,15 +462,34 @@ void inicia_jogo() {
     score_bmp = load_bitmap("imagens/score.bmp", NULL);
     score_back = load_bitmap("imagens/score-back.bmp", NULL);
 
-    // Contador
-    install_int(contador, 1000);
-    novo_contador(120);
+    final = load_bitmap("imagens/final.bmp", NULL);
+    menu = load_bitmap("imagens/menu.bmp", NULL);
+    menu_instrucoes = load_bitmap("imagens/instrucoes.bmp", NULL);
+    menu_selecionar_fase = load_bitmap("imagens/selecionar-fase.bmp", NULL);
+    jogo_pausado = load_bitmap("imagens/jogo-pausado.bmp", NULL);
+
+    show_mouse(screen);
+
+/*
+    mouse_sprite = load_bmp("imagens/mousesprite.bmp", NULL);
+    set_mouse_sprite(mouse_sprite);
+    set_mouse_sprite_focus(30, 26);  
+*/
 
     while (!key[KEY_ESC] && !close_button_pressed) {
         switch (estado_jogo) {
             case MENU:
+                clear_bitmap(buffer);
+                menu_inicial_jogo(buffer, menu, &botao_mouse_pressionado, &estado_jogo, fases_cenario, &fase_atual, &score);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score);
                 break;
-            case INSTRUCOES:
+            case MENU_SELECIONAR_FASE:
+                clear_bitmap(buffer);
+                menu_jogo(buffer, menu_selecionar_fase, &botao_mouse_pressionado, &estado_jogo);
+                break;
+            case MENU_INSTRUCOES:
+                clear_bitmap(buffer);
+                menu_jogo(buffer, menu_instrucoes, &botao_mouse_pressionado, &estado_jogo);
                 break;
             case JOGO:
                 clear_bitmap(buffer);
@@ -366,12 +511,39 @@ void inicia_jogo() {
                  */
                 break;
             case FINAL:
-                allegro_message("Final do jogo");
+                clear_bitmap(buffer);
+                menu_jogo(buffer, menu, &botao_mouse_pressionado, &estado_jogo);
+                final_jogo(buffer, final, numeros, score);
+
+
+                //allegro_message("Final do jogo");
+                break;
+            case SAIR:
+                close_button_pressed = TRUE;
+                break;
+            case PAUSADO:
+                clear_bitmap(buffer);
+                clear_bitmap(buffer);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score);
+                atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
+                draw_sprite(buffer, score_back, 0, 0);
+
+                update_score(buffer, numeros, score_bmp, score);
+
+                if (update_timer(buffer, numeros) == FALSE) {
+                    estado_jogo = FINAL;
+                }
+
+                textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
+                        -1, "FASE: %d", fase_atual + 1);
+                draw_sprite(buffer, jogo_pausado, 0, 0);
                 break;
         }
 
-        //vsync();
+
+        //vsync();        
         blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
+        //show_mouse(screen);
     }
 
     //Desaloca as imagens da memória
@@ -379,6 +551,17 @@ void inicia_jogo() {
     destroy_bitmap(texturas[0]);
     destroy_bitmap(texturas[1]);
     destroy_bitmap(texturas[2]);
+    destroy_bitmap(pacman);
+    destroy_bitmap(pacman2);
+    destroy_bitmap(numeros);
+    destroy_bitmap(score_bmp);
+    destroy_bitmap(score_back);
+    destroy_bitmap(final);
+    destroy_bitmap(menu);
+    destroy_bitmap(menu_instrucoes);
+    destroy_bitmap(menu_selecionar_fase);
+    destroy_bitmap(jogo_pausado);
+    //destroy_bitmap(mouse_sprite);
 }
 
 int main() {
