@@ -366,6 +366,7 @@ void inicia_jogo() {
                  */
                 break;
             case FINAL:
+                allegro_message("Final do jogo");
                 break;
         }
 
