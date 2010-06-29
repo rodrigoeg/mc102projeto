@@ -8,10 +8,16 @@
 		<Cursor position="756" topLine="7" />
 	</File>
 	<File name="main.c" open="1" top="1" tabpos="1">
-		<Cursor position="8612" topLine="258" />
+		<Cursor position="238" topLine="9" />
+	</File>
+	<File name="score.c" open="1" top="0" tabpos="6">
+		<Cursor position="570" topLine="15" />
+	</File>
+	<File name="score.h" open="1" top="0" tabpos="7">
+		<Cursor position="156" topLine="0" />
 	</File>
 	<File name="timer.c" open="1" top="0" tabpos="4">
-		<Cursor position="104" topLine="0" />
+		<Cursor position="93" topLine="0" />
 	</File>
 	<File name="timer.h" open="1" top="0" tabpos="5">
 		<Cursor position="52" topLine="0" />
