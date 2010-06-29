@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   score.h
  * Author: User
  *
@@ -9,7 +9,7 @@
 #define	SCORE1_H
 
 void le_score(int [10]);
-void salva_score(int [10]);
+void salva_score(int [10], int);
 void update_score(BITMAP *, BITMAP *, BITMAP *, int);
 int calcula_score(int, int);
 

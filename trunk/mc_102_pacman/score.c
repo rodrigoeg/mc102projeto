@@ -28,11 +28,11 @@ void le_score(int scores[10]) {
 
 }
 
-void salva_score(int scores[10]) {
+void salva_score(int scores[10], int score) {
     int i = 0;
     char char_count_linha[100];
 
-    FILE *fp = fopen("fases/scores.txt", "r");
+    FILE *fp = fopen("fases/scores.txt", "w");
 
 
     char *result = NULL;
@@ -84,6 +84,6 @@ void update_score(BITMAP *buffer, BITMAP *numeros, BITMAP *score_bmp, int score)
 }
 
 int calcula_score(int pontos, int total) {
-    printf("%d, %d \n", pontos, total);
+    //printf("%d, %d \n", pontos, total);
     return pontos + total;
 }

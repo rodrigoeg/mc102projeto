@@ -18,6 +18,7 @@
 #define FINAL 4
 #define SAIR 5
 #define PAUSADO 6
+#define MENU_SCORES 7
 
 #define TEMPO_FASE 120
 
@@ -242,9 +243,9 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
                 set_windowed();
                 show_mouse(screen);
             } else {
-                set_full_screen();                
+                set_full_screen();
             }
-            
+
             *full_screen = (*full_screen == TRUE) ? FALSE : TRUE;
         }
 
@@ -387,6 +388,7 @@ void inicia_jogo() {
     int estado_jogo = MENU;
     int score = 0;
     int botao_mouse_pressionado = FALSE;
+    int scores[10];
 
     LOCK_FUNCTION(close_button_handler);
     set_close_button_callback(close_button_handler);
@@ -434,7 +436,7 @@ void inicia_jogo() {
 /*
     mouse_sprite = load_bmp("imagens/mousesprite.bmp", NULL);
     set_mouse_sprite(mouse_sprite);
-    set_mouse_sprite_focus(30, 26);  
+    set_mouse_sprite_focus(30, 26);
 */
 
     while (!key[KEY_ESC] && !close_button_pressed) {
@@ -451,6 +453,11 @@ void inicia_jogo() {
             case MENU_INSTRUCOES:
                 clear_bitmap(buffer);
                 menu_jogo(buffer, menu_instrucoes, &botao_mouse_pressionado, &estado_jogo);
+                break;
+
+            case MENU_SCORES:
+                clear_bitmap(buffer);
+                le_score(scores);
                 break;
             case JOGO:
                 clear_bitmap(buffer);
@@ -470,6 +477,7 @@ void inicia_jogo() {
                         textprintf_centre_ex(buffer, font, SCREEN_W / 2, SCREEN_H / 2, makecol(255, 255, 0), -1,
                                 "Pressione espaço para mudar de fase.");
                  */
+                //salva_score(scores, score);
                 break;
             case FINAL:
                 clear_bitmap(buffer);
@@ -502,7 +510,7 @@ void inicia_jogo() {
         }
 
 
-        //vsync();        
+        //vsync();
         blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
         //show_mouse(screen);
     }
