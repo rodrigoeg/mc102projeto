@@ -439,6 +439,9 @@ void inicia_jogo() {
     set_mouse_sprite_focus(30, 26);
 */
 
+    le_score(scores);
+    salva_score(scores, score);
+
     while (!key[KEY_ESC] && !close_button_pressed) {
         switch (estado_jogo) {
             case MENU:
@@ -458,6 +461,7 @@ void inicia_jogo() {
             case MENU_SCORES:
                 clear_bitmap(buffer);
                 le_score(scores);
+                salva_score(scores, score);
                 break;
             case JOGO:
                 clear_bitmap(buffer);

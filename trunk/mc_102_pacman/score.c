@@ -7,7 +7,7 @@
 void le_score(int scores[10]) {
     int i = 0;
 
-    char char_count_linha[100];
+    char char_count_linha[50];
 
 
     FILE *fp = fopen("fases/scores.txt", "r");
@@ -30,17 +30,21 @@ void le_score(int scores[10]) {
 
 void salva_score(int scores[10], int score) {
     int i = 0;
-    char char_count_linha[100];
+    char char_count_linha[50];
+    char numeracao[100];
 
     FILE *fp = fopen("fases/scores.txt", "w");
 
 
     char *result = NULL;
     for (i = 0; i < 10; i++) {
-        //char_count_linha = scores[i];
-        //fputs(char_count_linha, fp);
-        //strcat(str, "\n");  /* add a newline */
-
+        itoa(scores[i], char_count_linha, 10);
+        itoa(i, numeracao, 10);
+        strcat(numeracao, "|");
+        strcat(numeracao, char_count_linha);
+        fputs(numeracao, fp);
+        fputs("\n",fp);
+          /* add a newline */
     }
 
     fclose(fp);

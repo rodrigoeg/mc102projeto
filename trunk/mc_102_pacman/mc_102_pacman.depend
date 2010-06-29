@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1277769895 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\main.c
+1277770416 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
@@ -42,7 +42,7 @@
 
 1277769923 c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\score.h
 
-1277770212 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\score.c
+1277770722 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\score.c
 	<stdio.h>
 	<stdlib.h>
 	<allegro.h>
