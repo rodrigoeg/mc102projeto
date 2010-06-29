@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="carrega_fases.c" open="1" top="0" tabpos="2">
-		<Cursor position="665" topLine="297" />
+	<File name="carrega_fases.c" open="1" top="1" tabpos="2">
+		<Cursor position="12171" topLine="265" />
 	</File>
 	<File name="carrega_fases.h" open="1" top="0" tabpos="3">
-		<Cursor position="756" topLine="6" />
+		<Cursor position="756" topLine="1" />
 	</File>
-	<File name="main.c" open="1" top="1" tabpos="1">
-		<Cursor position="2032" topLine="69" />
+	<File name="main.c" open="1" top="0" tabpos="1">
+		<Cursor position="4234" topLine="136" />
 	</File>
 	<File name="score.c" open="1" top="0" tabpos="6">
-		<Cursor position="2469" topLine="78" />
+		<Cursor position="2469" topLine="73" />
 	</File>
 	<File name="score.h" open="1" top="0" tabpos="7">
 		<Cursor position="156" topLine="0" />
