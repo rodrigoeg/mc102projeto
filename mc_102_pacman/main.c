@@ -11,6 +11,7 @@
 #define ALTURA_TELA 480
 
 //Estados do jogo
+
 #define MENU 0
 #define MENU_SELECIONAR_FASE 1
 #define MENU_INSTRUCOES 2
@@ -26,6 +27,25 @@
 
 //definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
+
+int set_full_screen() {
+    // inicialize o modo gráfico com uma resolução de tela
+    if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
+        allegro_message(allegro_error);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+int set_windowed() {
+    // inicialize o modo gráfico com uma resolução de tela
+    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
+        allegro_message(allegro_error);
+        return FALSE;
+    }
+    return TRUE;
+}
 
 void menu_inicial_jogo(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionado, int *estado_jogo, int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *score) {
 
@@ -170,7 +190,8 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
 int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao, int fase_atual, int *frame) {
     int x = 0;
     int y = 0;
-    int posicao_x, posicao_y;
+    int posicao_x = 0;
+    int posicao_y = 0;
 
 
     for (y = 0; y < TILES_Y; y++) {
@@ -346,22 +367,6 @@ int inicia_allegro() {
     set_window_title("Nancap");
 
     return TRUE;
-}
-
-int set_full_screen() {
-    // inicialize o modo gráfico com uma resolução de tela
-    if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
-        allegro_message(allegro_error);
-        return FALSE;
-    }
-}
-
-int set_windowed() {
-    // inicialize o modo gráfico com uma resolução de tela
-    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
-        allegro_message(allegro_error);
-        return FALSE;
-    }
 }
 
 void close_button_handler(void) //Permite a utilização do botão "Fechar" para fechar o aplicativo
