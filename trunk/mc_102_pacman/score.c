@@ -37,13 +37,10 @@ void salva_score(int scores[10], int score) {
 
     char *result = NULL;
     for (i = 0; i < 10; i++) {
-        fgets(char_count_linha, 100, fp);
+        //char_count_linha = scores[i];
+        //fputs(char_count_linha, fp);
+        //strcat(str, "\n");  /* add a newline */
 
-        char delims[] = "|";
-
-        strtok(char_count_linha, delims);
-        result = strtok(NULL, delims);
-        scores[i] = atoi(result);
     }
 
     fclose(fp);
