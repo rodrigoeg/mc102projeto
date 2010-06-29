@@ -25,11 +25,11 @@
 
 #define BUFFER_TECLADO 130
 
-//definida para funcionar o x da janela para fechar o programa
+//global que define o estado do "X" da janela do programa, usado para fechá-lo.
 volatile int close_button_pressed = FALSE;
 
 int set_full_screen() {
-    // inicialize o modo gráfico com uma resolução de tela
+    // inicializa o modo gráfico com a resolução definida em modo tela cheia
     if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
         allegro_message(allegro_error);
         return FALSE;
@@ -39,7 +39,7 @@ int set_full_screen() {
 }
 
 int set_windowed() {
-    // inicialize o modo gráfico com uma resolução de tela
+    // inicializa o modo gráfico com a resolução definida em modo janela
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
         allegro_message(allegro_error);
         return FALSE;
@@ -241,7 +241,6 @@ void final_jogo(BITMAP *buffer, BITMAP *final, BITMAP *numeros, int score) {
 }
 
 //apaga o numero da matriz e verifica se a numero é da sequencia da funcao
-
 void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *estado_jogo, int *score, int scores[10], int *sequencia, BITMAP *buffer, BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet, BITMAP *score_back, SAMPLE *intro, MIDI *fase2, MIDI *fase3, SAMPLE *come) {
     int y, x;
     int i;
@@ -315,7 +314,6 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
     int posicao_x = 0;
     int posicao_y = 0;
 
-
     for (y = 0; y < TILES_Y; y++) {
         for (x = 0; x < TILES_X; x++) {
             if ((char) fases_cenario[fase_atual][FUNDO][x][y] == 'P') { // Pacman
@@ -365,8 +363,8 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
 }
 
 /*
-A função abaixo é responsável por controlar as entradas do teclado, qualquer
-tecla pressionada durante a execução do jogo.
+A função abaixo é responsável por controlar as entradas do teclado (qualquer
+tecla pressionada durante a execução do jogo).
  */
 void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *full_screen, int *ultima_movimentacao, int *frame, int *estado_jogo, int *score, int scores[10],  int *sequencia, BITMAP *buffer, BITMAP *pacman, BITMAP *texturas[], BITMAP *sheet, BITMAP *score_back, SAMPLE *intro, MIDI *fase2, MIDI *fase3, SAMPLE *come) {
     /*
@@ -407,7 +405,6 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
                 buffer_teclado = BUFFER_TECLADO;
             }*/
 
-            // Muda o Cenário caso aperte a tecla espaço
             if (key[KEY_P]) {
                 if (*estado_jogo == JOGO) {
                     *estado_jogo = PAUSADO;
@@ -421,6 +418,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
                 buffer_teclado = BUFFER_TECLADO;
             }
 
+            //Retorna para o menu principal caso a tecla V seja pressionada
             if (key[KEY_V]) {
                 *estado_jogo = MENU;
             }
@@ -481,19 +479,18 @@ int inicia_allegro() {
     set_uformat(U_UTF8);
 
     // definição da profundidade de cor
-    // http://pt.wikipedia.org/wiki/Profundidade_de_cor
     set_color_depth(desktop_color_depth());
 
     srand((unsigned) time(NULL));
 
 
-    // inicialize o modo gráfico com uma resolução de tela
+    // inicialize o modo gráfico
     if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
         allegro_message(allegro_error);
         return FALSE;
     }
 
-    set_window_title("Nancap");
+    set_window_title("Namcap");
 
     return TRUE;
 }
@@ -507,7 +504,6 @@ END_OF_FUNCTION(close_button_handler)
 
 void inicia_jogo() {
 
-    //TODO mudar comentarios
     /*
          Variáveis Mapa tridimensional sendo o primeiro ecrãn a Fase e os
         outros dois correspondem a quantidade de Tiles na horizontal e vertical.
@@ -536,10 +532,6 @@ void inicia_jogo() {
     BITMAP *buffer = NULL;
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
-    //carrega_matriz_jogo(fases_cenario);
-    //carrega_texturas(pacman, pacman2, texturas, numeros);
-
-
     //carrega a imagem do pacman
     pacman = load_bitmap("imagens/pac-man.bmp", NULL);
     pacman2 = load_bitmap("imagens/pac-man2.bmp", NULL);
@@ -556,7 +548,7 @@ void inicia_jogo() {
     // Números
     numeros = load_bitmap("imagens/numeros.bmp", NULL);
 
-    //Score image
+    //Sprite dos números usados na pontuação
     score_bmp = load_bitmap("imagens/score.bmp", NULL);
     score_back = load_bitmap("imagens/score-back.bmp", NULL);
 
@@ -581,12 +573,6 @@ void inicia_jogo() {
     show_mouse(screen);
 
     play_midi(menu_m, TRUE);
-
-    /*
-        mouse_sprite = load_bmp("imagens/mousesprite.bmp", NULL);
-        set_mouse_sprite(mouse_sprite);
-        set_mouse_sprite_focus(30, 26);
-     */
 
     while (!key[KEY_ESC] && !close_button_pressed) {
         switch (estado_jogo) {
@@ -648,10 +634,7 @@ void inicia_jogo() {
 
                 textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
                         -1, "FASE: %d", fase_atual + 1);
-                /*
-                        textprintf_centre_ex(buffer, font, SCREEN_W / 2, SCREEN_H / 2, makecol(255, 255, 0), -1,
-                                "Pressione espaço para mudar de fase.");
-                 */
+
                 //salva_score(scores, score);
                 break;
             case FINAL:
@@ -679,8 +662,6 @@ void inicia_jogo() {
                 break;
         }
 
-
-        //vsync();
         blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
         //show_mouse(screen);
     }
