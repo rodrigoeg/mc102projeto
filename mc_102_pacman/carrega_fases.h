@@ -19,6 +19,7 @@
 #define DIR_DOWN 1
 #define DIR_LEFT 2
 #define DIR_RIGHT 3
+#define QTDE_SEQUENCIA 5
 
 void carrega_texturas(BITMAP *, BITMAP *, BITMAP *[], BITMAP *);
 void carrega_matriz_jogo(int [QTDE_FASES][2][TILES_X][TILES_Y]);

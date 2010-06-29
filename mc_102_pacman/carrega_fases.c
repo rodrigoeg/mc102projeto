@@ -270,19 +270,19 @@ void fase_funcao(int mat[], int fase) {
     switch (fase) {
         case 0:
             //2x
-            for (i = 0; i < 5; i++) {
+            for (i = 0; i < QTDE_SEQUENCIA; i++) {
                 mat[i] = 2 * i;
             }
             break;
         case 1:
             //2x + 1
-            for (i = 0; i < 5; i++) {
+            for (i = 0; i < QTDE_SEQUENCIA; i++) {
                 mat[i] = 2 * i + 1;
             }
             break;
         case 2:
             //3x + 7
-            for (i = 0; i < 5; i++) {
+            for (i = 0; i < QTDE_SEQUENCIA; i++) {
                 mat[i] = 3 * i + 2;
             }
 
@@ -298,19 +298,19 @@ void fase_numeros_errados(int mat[], int fase) {
     switch (fase) {
         case 0:
             //2x + 1
-            for (i = 0; i < 5; i++) {
+            for (i = 0; i < QTDE_SEQUENCIA; i++) {
                 mat[i] = 2 * i + 1;
             }
             break;
         case 1:
             //2x
-            for (i = 0; i < 5; i++) {
+            for (i = 0; i < QTDE_SEQUENCIA; i++) {
                 mat[i] = 2 * i;
             }
             break;
         case 2:
             //3x + 3
-            for (i = 0; i < 5; i++) {
+            for (i = 0; i < QTDE_SEQUENCIA; i++) {
                 mat[i] = 3 * i + 3;
             }
 
