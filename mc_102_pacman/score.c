@@ -32,19 +32,29 @@ void salva_score(int scores[10], int score) {
     int i = 0;
     char char_count_linha[50];
     char numeracao[100];
+    int score_savo = FALSE;
 
     FILE *fp = fopen("fases/scores.txt", "w");
 
 
     char *result = NULL;
     for (i = 0; i < 10; i++) {
-        itoa(scores[i], char_count_linha, 10);
-        itoa(i, numeracao, 10);
-        strcat(numeracao, "|");
-        strcat(numeracao, char_count_linha);
-        fputs(numeracao, fp);
-        fputs("\n",fp);
-          /* add a newline */
+        if ((score > scores[i]) && (score_savo == FALSE)) {
+            itoa(score, char_count_linha, 10);
+            itoa(i, numeracao, 10);
+            strcat(numeracao, "|");
+            strcat(numeracao, char_count_linha);
+            fputs(numeracao, fp);
+            fputs("\n",fp);
+            score_savo = TRUE;
+        } else{
+            itoa(scores[i], char_count_linha, 10);
+            itoa(i, numeracao, 10);
+            strcat(numeracao, "|");
+            strcat(numeracao, char_count_linha);
+            fputs(numeracao, fp);
+            fputs("\n",fp);
+        }
     }
 
     fclose(fp);
@@ -88,3 +98,5 @@ int calcula_score(int pontos, int total) {
     //printf("%d, %d \n", pontos, total);
     return pontos + total;
 }
+
+//TODO criar funcao de exibir os maiores scores
