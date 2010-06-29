@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1277770416 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\main.c
+1277771038 source:c:\documents and settings\ra104005\desktop\mc102projeto\mc_102_pacman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<time.h>
