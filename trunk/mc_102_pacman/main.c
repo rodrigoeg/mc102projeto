@@ -21,6 +21,7 @@
 #define PAUSADO 6
 #define MENU_SCORES 7
 
+
 #define TEMPO_FASE 120
 
 #define BUFFER_TECLADO 120
@@ -71,12 +72,18 @@ void menu_inicial_jogo(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionad
             }
 
             if ((mouse_x > 240 && mouse_x < 380) && (mouse_y > 355 && mouse_y < 375)) {
+                *estado_jogo = MENU_SCORES;
+            }
+
+
+            if ((mouse_x > 280 && mouse_x < 340) && (mouse_y > 375 && mouse_y < 410)) {
                 *estado_jogo = MENU_INSTRUCOES;
             }
 
-            if ((mouse_x > 280 && mouse_x < 340) && (mouse_y > 390 && mouse_y < 410)) {
+            if ((mouse_x > 280 && mouse_x < 340) && (mouse_y > 500 && mouse_y < 540)) {
                 *estado_jogo = SAIR;
             }
+
 
         }
     }
@@ -489,7 +496,6 @@ void inicia_jogo() {
                 clear_bitmap(buffer);
                 menu_jogo(buffer, menu, &botao_mouse_pressionado, &estado_jogo);
                 final_jogo(buffer, final, numeros, score);
-
 
                 //allegro_message("Final do jogo");
                 break;
