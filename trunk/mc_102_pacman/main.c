@@ -25,7 +25,7 @@
 
 #define TEMPO_FASE 20
 
-#define BUFFER_TECLADO 30
+#define BUFFER_TECLADO 70
 
 //definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
@@ -110,6 +110,84 @@ void menu_inicial_jogo(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionad
     draw_sprite(buffer, menu, 0, 0);
 }
 
+void menu_sel_fase(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionado, int *estado_jogo, int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *score, SAMPLE *som_menu, MIDI *fase1, MIDI *fase2, MIDI *fase3, BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet, BITMAP *score_back, SAMPLE *intro, MIDI *menu_m) {
+
+    if (*botao_mouse_pressionado == FALSE) {
+        if (mouse_b & 1) {
+            *botao_mouse_pressionado = TRUE;
+        }
+    } else {
+        if (!(mouse_b & 1)) {
+            *botao_mouse_pressionado = FALSE;
+            if ((mouse_x > 70 && mouse_x < 400) && (mouse_y > 125 && mouse_y < 165)) {
+                play_sample(som_menu, 500, 500, 2000, 0);
+                *estado_jogo = JOGO;
+                carrega_matriz_jogo(fases_cenario);
+                // Contador
+                install_int(contador, 1000);
+                novo_contador(TEMPO_FASE);
+                clear_bitmap(buffer);
+                *fase_atual = 0;
+                *score = 0;
+                atualiza_tela(buffer, 0, fases_cenario, pacman, texturas, ultima_movimentacao, sheet);
+                draw_sprite(buffer, score_back, 0, 0);
+                blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
+                stop_midi();
+                play_sample(intro, 500, 500, 1000, 0);
+                rest(4000);
+                play_midi(fase1, TRUE);
+            }
+
+            if ((mouse_x > 70 && mouse_x < 440) && (mouse_y > 195 && mouse_y < 240)) {
+                play_sample(som_menu, 500, 500, 2000, 0);
+                *estado_jogo = JOGO;
+                carrega_matriz_jogo(fases_cenario);
+                // Contador
+                install_int(contador, 1000);
+                novo_contador(TEMPO_FASE);
+                clear_bitmap(buffer);
+                *fase_atual = 1;
+                *score = 0;
+                atualiza_tela(buffer, 1, fases_cenario, pacman, texturas, ultima_movimentacao, sheet);
+                draw_sprite(buffer, score_back, 0, 0);
+                blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
+                stop_midi();
+                play_sample(intro, 500, 500, 1000, 0);
+                rest(4000);
+                play_midi(fase2, TRUE);
+            }
+
+            if ((mouse_x > 70 && mouse_x < 390) && (mouse_y > 270 && mouse_y < 315)) {
+                play_sample(som_menu, 500, 500, 2000, 0);
+                *estado_jogo = JOGO;
+                carrega_matriz_jogo(fases_cenario);
+                // Contador
+                install_int(contador, 1000);
+                novo_contador(TEMPO_FASE);
+                clear_bitmap(buffer);
+                *fase_atual = 2;
+                *score = 0;
+                atualiza_tela(buffer, 2, fases_cenario, pacman, texturas, ultima_movimentacao, sheet);
+                draw_sprite(buffer, score_back, 0, 0);
+                blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
+                stop_midi();
+                play_sample(intro, 500, 500, 1000, 0);
+                rest(4000);
+                play_midi(fase3, TRUE);
+            }
+
+            if ((mouse_x > 20 && mouse_x < 100) && (mouse_y > 440 && mouse_y < 460)) {
+                play_sample(som_menu, 500, 500, 2000, 0);
+                stop_midi();
+                play_midi(menu_m, TRUE);
+                *estado_jogo = MENU;
+            }
+        }
+
+    }
+     draw_sprite(buffer, menu, 0, 0);
+}
+
 void menu_jogo(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionado, int *estado_jogo, SAMPLE *som_menu, MIDI *menu_m) {
     if (*botao_mouse_pressionado == FALSE) {
         if (mouse_b & 1) {
@@ -166,7 +244,7 @@ void final_jogo(BITMAP *buffer, BITMAP *final, BITMAP *numeros, int score) {
 
 //apaga o numero da matriz e verifica se a numero é da sequencia da funcao
 
-void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *estado_jogo, int *score, int scores[10], int *sequencia, BITMAP *buffer, BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet, BITMAP *score_back, SAMPLE *intro, MIDI *fase2, MIDI *fase3) {
+void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *estado_jogo, int *score, int scores[10], int *sequencia, BITMAP *buffer, BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet, BITMAP *score_back, SAMPLE *intro, MIDI *fase2, MIDI *fase3, SAMPLE *come) {
     int y, x;
     int i;
     int mat[5];
@@ -185,8 +263,7 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
         fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] = -1;
         *score = calcula_score(mat[*sequencia], *score);
         *sequencia = *sequencia + 1;
-        printf("acertou \n");
-        //ganha pontos
+        play_sample(come, 500, 500, 1000, 0);
     } else {
         if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] != -1) {
             for (i = 0; i < 5; i++) {
@@ -197,8 +274,7 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
             }
             *score = calcula_score(-(fases_cenario[*fase_atual][FRENTE][x - 1][y - 1]), *score);
             fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] = -1;
-            printf("errou \n");
-            //perde pontos
+            play_sample(come, 500, 500, 1000, 0);
         }
     }
 
@@ -294,7 +370,7 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
 A função abaixo é responsável por controlar as entradas do teclado, qualquer
 tecla pressionada durante a execução do jogo.
  */
-void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *full_screen, int *ultima_movimentacao, int *frame, int *estado_jogo, int *score, int scores[10],  int *sequencia, BITMAP *buffer, BITMAP *pacman, BITMAP *texturas[], BITMAP *sheet, BITMAP *score_back, SAMPLE *intro, MIDI *fase2, MIDI *fase3) {
+void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *full_screen, int *ultima_movimentacao, int *frame, int *estado_jogo, int *score, int scores[10],  int *sequencia, BITMAP *buffer, BITMAP *pacman, BITMAP *texturas[], BITMAP *sheet, BITMAP *score_back, SAMPLE *intro, MIDI *fase2, MIDI *fase3, SAMPLE *come) {
     /*
     Quando declaramos uma variável como sendo static quer dizer que mesmo saindo
     da função ela não vai perder o valor dela. Dessa forma, utilizamos a variável
@@ -376,7 +452,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
             }
 
             if (key[KEY_ALT]) {
-                come_numero(fases_cenario, fase_atual, estado_jogo, score, scores, sequencia, buffer, pacman, texturas, *ultima_movimentacao, sheet, score_back, intro, fase2, fase3);
+                come_numero(fases_cenario, fase_atual, estado_jogo, score, scores, sequencia, buffer, pacman, texturas, *ultima_movimentacao, sheet, score_back, intro, fase2, fase3, come);
             }
         }
 
@@ -519,11 +595,12 @@ void inicia_jogo() {
             case MENU:
                 clear_bitmap(buffer);
                 menu_inicial_jogo(buffer, menu, &botao_mouse_pressionado, &estado_jogo, fases_cenario, &fase_atual, &score, come, menu1, menu2, menu3, pacman, texturas, ultima_movimentacao, numeros, score_back, intro, fase1);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3, come);
                 break;
             case MENU_SELECIONAR_FASE:
                 clear_bitmap(buffer);
-                menu_jogo(buffer, menu_selecionar_fase, &botao_mouse_pressionado, &estado_jogo, come, menu_m);
+                menu_sel_fase(buffer, menu_selecionar_fase, &botao_mouse_pressionado, &estado_jogo, fases_cenario, &fase_atual, &score, come, fase1, fase2, fase3, pacman, texturas, ultima_movimentacao, numeros, score_back, intro, menu_m);
+                //menu_jogo(buffer, menu_selecionar_fase, &botao_mouse_pressionado, &estado_jogo, come, menu_m);
                 break;
             case MENU_INSTRUCOES:
                 clear_bitmap(buffer);
@@ -537,7 +614,7 @@ void inicia_jogo() {
                 break;
             case JOGO:
                 clear_bitmap(buffer);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3, come);
                 atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
                 draw_sprite(buffer, score_back, 0, 0);
 
@@ -592,7 +669,7 @@ void inicia_jogo() {
             case PAUSADO:
                 clear_bitmap(buffer);
                 clear_bitmap(buffer);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3, come);
                 atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
                 draw_sprite(buffer, score_back, 0, 0);
 
@@ -625,6 +702,15 @@ void inicia_jogo() {
     destroy_bitmap(menu_instrucoes);
     destroy_bitmap(menu_selecionar_fase);
     destroy_bitmap(jogo_pausado);
+    destroy_midi(menu_m);
+    destroy_midi(menu1);
+    destroy_midi(menu2);
+    destroy_midi(menu3);
+    destroy_midi(fase1);
+    destroy_midi(fase2);
+    destroy_midi(fase3);
+    destroy_sample(come);
+    destroy_sample(intro);
     //destroy_bitmap(mouse_sprite);
 }
 
