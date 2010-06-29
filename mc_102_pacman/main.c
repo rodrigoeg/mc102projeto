@@ -22,7 +22,7 @@
 
 #define TEMPO_FASE 120
 
-#define BUFFER_TECLADO 40
+#define BUFFER_TECLADO 120
 
 //definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
