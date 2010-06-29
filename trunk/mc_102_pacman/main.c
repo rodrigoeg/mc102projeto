@@ -21,10 +21,11 @@
 #define PAUSADO 6
 #define MENU_SCORES 7
 
+#define QTDE_SEQUENCIA 5
 
-#define TEMPO_FASE 120
+#define TEMPO_FASE 20
 
-#define BUFFER_TECLADO 120
+#define BUFFER_TECLADO 30
 
 //definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
@@ -71,16 +72,16 @@ void menu_inicial_jogo(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionad
                 *estado_jogo = MENU_SELECIONAR_FASE;
             }
 
-            if ((mouse_x > 240 && mouse_x < 380) && (mouse_y > 355 && mouse_y < 375)) {
+            if ((mouse_x > 265 && mouse_x < 350) && (mouse_y > 355 && mouse_y < 375)) {
                 *estado_jogo = MENU_SCORES;
             }
 
 
-            if ((mouse_x > 280 && mouse_x < 340) && (mouse_y > 375 && mouse_y < 410)) {
+            if ((mouse_x > 240 && mouse_x < 386) && (mouse_y > 390 && mouse_y < 410)) {
                 *estado_jogo = MENU_INSTRUCOES;
             }
 
-            if ((mouse_x > 280 && mouse_x < 340) && (mouse_y > 500 && mouse_y < 540)) {
+            if ((mouse_x > 280 && mouse_x < 340) && (mouse_y > 420 && mouse_y < 445)) {
                 *estado_jogo = SAIR;
             }
 
@@ -142,8 +143,8 @@ void final_jogo(BITMAP *buffer, BITMAP *final, BITMAP *numeros, int score) {
 }
 
 //apaga o numero da matriz e verifica se a numero é da sequencia da funcao
-void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *estado_jogo, int *score) {
-    static int sequencia = 0;
+
+void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *estado_jogo, int *score, int scores[10], int *sequencia) {
     int y, x;
     int i;
     int mat[5];
@@ -158,17 +159,17 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
         }
     }
 
-    if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] == mat[sequencia]) {
+    if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] == mat[*sequencia]) {
         fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] = -1;
-        *score = calcula_score(mat[sequencia], *score);
-        sequencia++;
+        *score = calcula_score(mat[*sequencia], *score);
+        *sequencia = *sequencia + 1;
         printf("acertou \n");
         //ganha pontos
     } else {
         if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] != -1) {
             for (i = 0; i < 5; i++) {
                 if (fases_cenario[*fase_atual][FRENTE][x - 1][y - 1] == mat[i]) {
-                    sequencia++;
+                    *sequencia = *sequencia + 1;
                     break;
                 }
             }
@@ -179,17 +180,17 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
         }
     }
 
-    //TODO trocar para uma constante
-    if (sequencia == 5) {
-        //TODO trocar para uma constante
+    if (*sequencia == QTDE_SEQUENCIA) {
         if (*fase_atual < QTDE_FASES - 1) {
             *fase_atual = *fase_atual + 1;
-            sequencia = 0;
+            *sequencia = 0;
             novo_contador(TEMPO_FASE);
         } else {
             //TODO final do jogo
             //allegro_message("Final do jogo");
             *estado_jogo = FINAL;
+            le_score(scores);
+            salva_score(scores, *score);
         }
     }
 }
@@ -253,7 +254,7 @@ int anda_pacman(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int direcao,
 A função abaixo é responsável por controlar as entradas do teclado, qualquer
 tecla pressionada durante a execução do jogo.
  */
-void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *full_screen, int *ultima_movimentacao, int *frame, int *estado_jogo, int *score) {
+void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *full_screen, int *ultima_movimentacao, int *frame, int *estado_jogo, int *score, int scores[10],  int *sequencia) {
     /*
     Quando declaramos uma variável como sendo static quer dizer que mesmo saindo
     da função ela não vai perder o valor dela. Dessa forma, utilizamos a variável
@@ -280,10 +281,14 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
         if ((*estado_jogo == JOGO) || (*estado_jogo == PAUSADO)) {
             // Muda o Cenário caso aperte a tecla espaço
             if (key[KEY_SPACE]) {
-                if (*fase_atual < (QTDE_FASES - 1))
+                if (*fase_atual < (QTDE_FASES - 1)) {
                     *fase_atual = *fase_atual + 1;
-                else
+                } else {
                     *fase_atual = 0;
+                }
+
+                novo_contador(TEMPO_FASE);
+                *score = 0;
 
                 buffer_teclado = BUFFER_TECLADO;
             }
@@ -331,7 +336,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
             }
 
             if (key[KEY_ALT]) {
-                come_numero(fases_cenario, fase_atual, estado_jogo, score);
+                come_numero(fases_cenario, fase_atual, estado_jogo, score, scores, sequencia);
             }
         }
 
@@ -401,13 +406,14 @@ void inicia_jogo() {
     int score = 0;
     int botao_mouse_pressionado = FALSE;
     int scores[10];
+    int sequencia = 0;
 
     LOCK_FUNCTION(close_button_handler);
     set_close_button_callback(close_button_handler);
 
 
     //Variável do tipo BITMAP responsável por guardar as texturas
-    BITMAP *pacman, *pacman2, *numeros, *score_bmp, *score_back, *final, *menu, *menu_instrucoes, *menu_selecionar_fase, *jogo_pausado;
+    BITMAP *pacman, *pacman2, *numeros, *score_bmp, *score_back, *final, *menu, *menu_instrucoes, *menu_selecionar_fase, *jogo_pausado, *scores_bmp;
     BITMAP * texturas[3];
 
     BITMAP *buffer = NULL;
@@ -442,21 +448,22 @@ void inicia_jogo() {
     menu_instrucoes = load_bitmap("imagens/instrucoes.bmp", NULL);
     menu_selecionar_fase = load_bitmap("imagens/selecionar-fase.bmp", NULL);
     jogo_pausado = load_bitmap("imagens/jogo-pausado.bmp", NULL);
+    scores_bmp = load_bitmap("imagens/scores.bmp", NULL);
 
     show_mouse(screen);
 
-/*
-    mouse_sprite = load_bmp("imagens/mousesprite.bmp", NULL);
-    set_mouse_sprite(mouse_sprite);
-    set_mouse_sprite_focus(30, 26);
-*/
+    /*
+        mouse_sprite = load_bmp("imagens/mousesprite.bmp", NULL);
+        set_mouse_sprite(mouse_sprite);
+        set_mouse_sprite_focus(30, 26);
+     */
 
     while (!key[KEY_ESC] && !close_button_pressed) {
         switch (estado_jogo) {
             case MENU:
                 clear_bitmap(buffer);
                 menu_inicial_jogo(buffer, menu, &botao_mouse_pressionado, &estado_jogo, fases_cenario, &fase_atual, &score);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores, &sequencia);
                 break;
             case MENU_SELECIONAR_FASE:
                 clear_bitmap(buffer);
@@ -469,19 +476,27 @@ void inicia_jogo() {
 
             case MENU_SCORES:
                 clear_bitmap(buffer);
+                menu_jogo(buffer, scores_bmp, &botao_mouse_pressionado, &estado_jogo);
                 le_score(scores);
-                salva_score(scores, score);
+                mostrar_scores(buffer, scores);
                 break;
             case JOGO:
                 clear_bitmap(buffer);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia);
                 atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
                 draw_sprite(buffer, score_back, 0, 0);
 
                 update_score(buffer, numeros, score_bmp, score);
 
                 if (update_timer(buffer, numeros) == FALSE) {
-                    estado_jogo = FINAL;
+                    if (fase_atual >= QTDE_FASES - 1) {
+                        estado_jogo = FINAL;
+                        le_score(scores);
+                        salva_score(scores, score);
+                    } else {
+                        fase_atual++;
+                        novo_contador(TEMPO_FASE);
+                    }
                 }
 
                 textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
@@ -496,8 +511,8 @@ void inicia_jogo() {
                 clear_bitmap(buffer);
                 menu_jogo(buffer, menu, &botao_mouse_pressionado, &estado_jogo);
                 final_jogo(buffer, final, numeros, score);
-
-                //allegro_message("Final do jogo");
+                fase_atual = 0;
+                sequencia = 0;
                 break;
             case SAIR:
                 close_button_pressed = TRUE;
@@ -505,15 +520,11 @@ void inicia_jogo() {
             case PAUSADO:
                 clear_bitmap(buffer);
                 clear_bitmap(buffer);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia);
                 atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
                 draw_sprite(buffer, score_back, 0, 0);
 
                 update_score(buffer, numeros, score_bmp, score);
-
-                if (update_timer(buffer, numeros) == FALSE) {
-                    estado_jogo = FINAL;
-                }
 
                 textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
                         -1, "FASE: %d", fase_atual + 1);
