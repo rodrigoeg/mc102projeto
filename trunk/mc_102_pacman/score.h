@@ -1,10 +1,3 @@
-/*
- * File:   score.h
- * Author: User
- *
- * Created on 28 de Junho de 2010, 19:42
- */
-
 #ifndef SCORE1_H
 #define	SCORE1_H
 

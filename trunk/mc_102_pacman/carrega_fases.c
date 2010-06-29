@@ -3,12 +3,7 @@
 #include <allegro.h>
 #include "carrega_fases.h"
 
-/*
-A função abaixo é a mais importante com relação ao arquivo de fases. Ela serve
-para carregar os valores que estão dentro do arquivo de fase para a matriz.
-Com base na matriz iremos montar o cenário de cada fase e posicionar suas
-respectivas texturas ou objetos, dependendo de como você modificar o código.
- */
+//A função abaixo serve para carregar os valores que estão dentro do arquivo de fase para a matriz.
 void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
     //A variável abaixo guarda o local onde estão as fases em arquivo texto.
     char *arq_fases[] = {"fases/fase1.txt", "fases/fase2.txt", "fases/fase3.txt"};
@@ -20,7 +15,7 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
     char char_count_linha[ TILES_X ]; // Qtde de caracteres por linha
 
 
-    //O FOR abaixo é para preencher todas as fases.
+    //O for abaixo é para preencher todas as fases.
     for (fases = 0; fases < QTDE_FASES; fases++) {
         int mat[5];
         int mat_erradas[5];
@@ -28,7 +23,7 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
         fase_numeros_errados(mat_erradas, fases);
         char tile = ' ';
 
-        // Abre o arquivo de fases para leitura com base no iFase e o Array de fases
+        // Abre o arquivo de fases para leitura com base no iFase e o vetor de fases
         FILE *fp = fopen(arq_fases[fases], "r");
 
         //Preenche a matriz na horizontal e vertical
@@ -141,8 +136,7 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
 
 /*
 A função abaixo é responsável por declarar e definir as imagens que iremos
-utilizar no Array Textura. Essa imagens devem estar dentro da pasta imagens no
-nosso projeto,caso contrário o programa irá apresentar a mensagem de erro fatal.
+utilizar no vetor de texturas. Essas imagens estão dentro da pasta "imagens"
  */
 void carrega_texturas(BITMAP *pacman, BITMAP *pacman2, BITMAP *texturas[], BITMAP *numeros) {
 
@@ -165,8 +159,8 @@ void carrega_texturas(BITMAP *pacman, BITMAP *pacman2, BITMAP *texturas[], BITMA
 }
 
 /*
-Essa função é responsável por desenhar as texturas do cenário. O cenário a ser
-carregado é informado através de um argumento. Essa função usa como base a matriz
+Esta função é responsável por desenhar as texturas do cenário. O cenário a ser
+carregado é informado através de um parâmetro. Essa função usa como base a matriz
 carregada anteriormente para desenhar as texturas.
  */
 void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet) {
