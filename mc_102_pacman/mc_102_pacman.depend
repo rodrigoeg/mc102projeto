@@ -49,3 +49,35 @@
 	"carrega_fases.h"
 	<string.h>
 
+1277837613 source:c:\users\oscar\documents\cc010\mc102projeto\mc_102_pacman\score.c
+	<stdio.h>
+	<stdlib.h>
+	<allegro.h>
+	"carrega_fases.h"
+	<string.h>
+
+1277776689 c:\users\oscar\documents\cc010\mc102projeto\mc_102_pacman\carrega_fases.h
+
+1277776689 source:c:\users\oscar\documents\cc010\mc102projeto\mc_102_pacman\timer.c
+	<allegro.h>
+
+1277776689 source:c:\users\oscar\documents\cc010\mc102projeto\mc_102_pacman\carrega_fases.c
+	<stdio.h>
+	<stdlib.h>
+	<allegro.h>
+	"carrega_fases.h"
+
+1277840581 source:c:\users\oscar\documents\cc010\mc102projeto\mc_102_pacman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<allegro.h>
+	<math.h>
+	"carrega_fases.h"
+	"timer.h"
+	"score.h"
+
+1277776689 c:\users\oscar\documents\cc010\mc102projeto\mc_102_pacman\timer.h
+
+1277837613 c:\users\oscar\documents\cc010\mc102projeto\mc_102_pacman\score.h
+
