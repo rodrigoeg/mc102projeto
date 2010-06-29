@@ -25,7 +25,7 @@
 
 #define TEMPO_FASE 20
 
-#define BUFFER_TECLADO 70
+#define BUFFER_TECLADO 130
 
 //definida para funcionar o x da janela para fechar o programa
 volatile int close_button_pressed = FALSE;
@@ -396,7 +396,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
 
         if ((*estado_jogo == JOGO) || (*estado_jogo == PAUSADO)) {
             // Muda o Cenário caso aperte a tecla espaço
-            if (key[KEY_SPACE]) {
+            /*if (key[KEY_SPACE]) {
                 if (*fase_atual < (QTDE_FASES - 1)) {
                     *fase_atual = *fase_atual + 1;
                 } else {
@@ -407,7 +407,7 @@ void teclado(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual
                 *score = 0;
 
                 buffer_teclado = BUFFER_TECLADO;
-            }
+            }*/
 
             // Muda o Cenário caso aperte a tecla espaço
             if (key[KEY_P]) {
