@@ -21,8 +21,6 @@
 #define PAUSADO 6
 #define MENU_SCORES 7
 
-#define QTDE_SEQUENCIA 5
-
 #define TEMPO_FASE 20
 
 #define BUFFER_TECLADO 130
