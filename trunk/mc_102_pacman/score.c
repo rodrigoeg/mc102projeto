@@ -37,7 +37,7 @@ void salva_score(int scores[10], int score) {
     FILE *fp = fopen("fases/scores.txt", "w");
 
     for (i = 0; i < 10; i++) {
-        if ((score >= scores[i]) && (score_salvo == FALSE) || ((i == 9) && (score_salvo == FALSE))) {
+        if (((score >= scores[i]) && (score_salvo == FALSE)) || ((i == 9) && (score_salvo == FALSE))) {
             itoa(score, char_count_linha, 10);
             itoa(i, numeracao, 10);
             strcat(numeracao, "|");

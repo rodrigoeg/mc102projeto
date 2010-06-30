@@ -47,6 +47,22 @@ int set_windowed() {
     return TRUE;
 }
 
+char *nome_funcao(int numero_fase){
+    switch(numero_fase){
+        case 0:
+            return "Pares";
+        case 1:
+            return "Ímpares";
+        case 2:
+            return "f(x)=3x+2";
+        case 3:
+            return "f(x)=10-2x";
+
+    }
+    return "Fase Desconhecida";
+}
+
+
 void menu_inicial_jogo(BITMAP *buffer, BITMAP *menu, int *botao_mouse_pressionado, int *estado_jogo, int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_atual, int *score, SAMPLE *som_menu, MIDI *menu1, MIDI *menu2, MIDI *menu3, BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet, BITMAP *score_back, SAMPLE *intro, MIDI *fase1) {
 
     if (*botao_mouse_pressionado == FALSE) {
@@ -277,6 +293,7 @@ void come_numero(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], int *fase_a
 
     if (*sequencia == QTDE_SEQUENCIA) {
         if (*fase_atual < QTDE_FASES - 1) {
+            printf("OK\n");
             *fase_atual = *fase_atual + 1;
             *sequencia = 0;
             novo_contador(TEMPO_FASE);
@@ -574,6 +591,8 @@ void inicia_jogo() {
 
     play_midi(menu_m, TRUE);
 
+
+
     while (!key[KEY_ESC] && !close_button_pressed) {
         switch (estado_jogo) {
             case MENU:
@@ -633,7 +652,7 @@ void inicia_jogo() {
                 }
 
                 textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
-                        -1, "FASE: %d", fase_atual + 1);
+                        -1, "FASE: %d %s", fase_atual + 1, nome_funcao(fase_atual));
 
                 //salva_score(scores, score);
                 break;
@@ -657,7 +676,7 @@ void inicia_jogo() {
                 update_score(buffer, numeros, score_bmp, score);
 
                 textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
-                        -1, "FASE: %d", fase_atual + 1);
+                        -1, "FASE: %d %s", fase_atual + 1, nome_funcao(fase_atual));
                 draw_sprite(buffer, jogo_pausado, 0, 0);
                 break;
         }
