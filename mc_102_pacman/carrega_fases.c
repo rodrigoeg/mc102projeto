@@ -6,7 +6,7 @@
 //A função abaixo serve para carregar os valores que estão dentro do arquivo de fase para a matriz.
 void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
     //A variável abaixo guarda o local onde estão as fases em arquivo texto.
-    char *arq_fases[] = {"fases/fase1.txt", "fases/fase2.txt", "fases/fase3.txt"};
+    char *arq_fases[] = {"fases/fase1.txt", "fases/fase2.txt", "fases/fase3.txt", "fases/fase4.txt"};
     int x = 0;
     int y = 0;
     int fases = 0;
@@ -281,6 +281,13 @@ void fase_funcao(int mat[], int fase) {
             }
 
             break;
+        case 3:
+            //8 - 2x
+            for (i = 0; i < QTDE_SEQUENCIA; i++) {
+                mat[i] = 10 - (2 * i);
+            }
+
+            break;
     }
 
 }
@@ -306,6 +313,13 @@ void fase_numeros_errados(int mat[], int fase) {
             //3x + 3
             for (i = 0; i < QTDE_SEQUENCIA; i++) {
                 mat[i] = 3 * i + 3;
+            }
+
+            break;
+        case 3:
+            //2x + 1
+            for (i = 0; i < QTDE_SEQUENCIA; i++) {
+                mat[i] = 9 - (2*i);
             }
 
             break;
