@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <allegro.h>
-#include "carrega_fases.h"
-#include <string.h>
+#include "carrega_jogo.h"
 
 void le_score(int scores[10]) {
     int i = 0;

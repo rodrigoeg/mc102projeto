@@ -5,16 +5,23 @@
                    displayName="Arquivos de cabeçalho"
                    projectFiles="true">
       <itemPath>carrega_fases.h</itemPath>
+      <itemPath>carrega_jogo.h</itemPath>
+      <itemPath>contador.h</itemPath>
+      <itemPath>menu.h</itemPath>
+      <itemPath>namcap.h</itemPath>
       <itemPath>score.h</itemPath>
-      <itemPath>timer.h</itemPath>
+      <itemPath>teclado.h</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Arquivos de código-fonte"
                    projectFiles="true">
       <itemPath>carrega_fases.c</itemPath>
+      <itemPath>contador.c</itemPath>
       <itemPath>main.c</itemPath>
+      <itemPath>menu.c</itemPath>
+      <itemPath>namcap.c</itemPath>
       <itemPath>score.c</itemPath>
-      <itemPath>timer.c</itemPath>
+      <itemPath>teclado.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Arquivos de recurso"

@@ -8,24 +8,54 @@
 #ifndef _CARREGA_FASES_H
 #define	_CARREGA_FASES_H
 
-#define QTDE_FASES 3 // Jogo com 3 fases
-#define TAM_TILES_X 32 // Largura do Tile
-#define TAM_TILES_Y 32 // Altura do Tile
-#define TILES_X 20 // Qtde de Tiles na horizontal - 32*20 = 640;
-#define TILES_Y 15 // Qtde de Tiles na vertical   - 32*15 = 480;
-#define FUNDO 0
-#define FRENTE 1
-#define DIR_UP 0
-#define DIR_DOWN 1
-#define DIR_LEFT 2
-#define DIR_RIGHT 3
-#define QTDE_SEQUENCIA 5
+#include "carrega_jogo.h"
 
-void carrega_texturas(BITMAP *, BITMAP *, BITMAP *[], BITMAP *);
-void carrega_matriz_jogo(int [QTDE_FASES][2][TILES_X][TILES_Y]);
-void atualiza_tela(BITMAP *, int, int [QTDE_FASES][2][TILES_X][TILES_Y], BITMAP *, BITMAP *[], int, BITMAP *);
+/**
+ * 
+ * @param pacman
+ * @param pacman2
+ * @param texturas
+ * @param numeros
+ */
+void carrega_texturas(BITMAP *pacman, BITMAP *pacman2, BITMAP *texturas[], BITMAP *numeros);
 
-void fase_funcao(int [], int);
-void fase_numeros_errados(int [], int);
+/**
+ *
+ * @param fases_cenario
+ */
+void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]);
+
+/**
+ *
+ * @param buffer
+ * @param fase_atual
+ * @param fases_cenario
+ * @param pacman
+ * @param texturas
+ * @param ultima_movimentacao
+ * @param sheet
+ */
+void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet);
+
+/**
+ *
+ * @param mat
+ * @param fase
+ */
+void fase_funcao(int mat[], int fase);
+
+/**
+ *
+ * @param mat
+ * @param fase
+ */
+void fase_numeros_errados(int mat[], int fase);
+
+/**
+ *
+ * @param numero_fase
+ * @return
+ */
+char *nome_funcao(int numero_fase);
 
 #endif	/* _CARREGA_FASES_H */
