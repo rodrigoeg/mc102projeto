@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <allegro.h>
-#include "carrega_fases.h"
+#include "carrega_jogo.h"
 
 //A função abaixo serve para carregar os valores que estão dentro do arquivo de fase para a matriz.
 void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
@@ -327,3 +324,17 @@ void fase_numeros_errados(int mat[], int fase) {
 
 }
 
+char *nome_funcao(int numero_fase) {
+    switch(numero_fase){
+        case 0:
+            return "Pares";
+        case 1:
+            return "Ímpares";
+        case 2:
+            return "f(x)=3x+2";
+        case 3:
+            return "f(x)=10-2x";
+
+    }
+    return "Fase Desconhecida";
+}

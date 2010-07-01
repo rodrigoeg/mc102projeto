@@ -1,4 +1,4 @@
-#include <allegro.h>
+#include "carrega_jogo.h"
 
 int vcontador = 0;
 
@@ -10,7 +10,7 @@ void contador() {
     vcontador--;
 }
 
-int update_timer(BITMAP *buffer, BITMAP *sheet) {
+int atualizar_contador(BITMAP *buffer, BITMAP *sheet) {
     BITMAP *bolinha;
     bolinha = create_bitmap(9, 9);
     rectfill(bolinha, 0, 0, 8, 8, makecol(255, 0, 255));
@@ -34,4 +34,6 @@ int update_timer(BITMAP *buffer, BITMAP *sheet) {
     return TRUE;
 }
 
-
+void contador_teclado(void *buffer_teclado) {    
+    *(int *)buffer_teclado = TRUE;
+}
