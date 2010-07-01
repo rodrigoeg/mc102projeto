@@ -30,13 +30,6 @@
 
 #define TEMPO_FASE 60
 
-/*
- * File:   carrega_jogo.h
- * Author: User
- *
- * Created on 30 de Junho de 2010, 22:10
- */
-
 #define BUFFER_TECLADO 150
 
 #define QTDE_FASES 3 // Jogo com 3 fases
