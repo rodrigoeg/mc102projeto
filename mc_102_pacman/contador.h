@@ -1,10 +1,3 @@
-/*
- * File:   contador.h
- * Author: User
- *
- * Created on 30 de Junho de 2010, 22:10
- */
-
 #ifndef CONTADOR_H_INCLUDED
 #define CONTADOR_H_INCLUDED
 

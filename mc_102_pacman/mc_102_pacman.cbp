@@ -35,17 +35,30 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="carrega_fases.h" />
+		<Unit filename="carrega_jogo.h" />
+		<Unit filename="contador.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="contador.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="menu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="menu.h" />
+		<Unit filename="namcap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="namcap.h" />
 		<Unit filename="score.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="score.h" />
-		<Unit filename="timer.c">
+		<Unit filename="teclado.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="timer.h" />
+		<Unit filename="teclado.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

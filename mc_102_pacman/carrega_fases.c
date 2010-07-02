@@ -1,7 +1,8 @@
 #include "carrega_jogo.h"
 
 //A função abaixo serve para carregar os valores que estão dentro do arquivo de fase para a matriz.
-void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
+
+void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][QTDE_TILES_X][QTDE_TILES_Y]) {
     //A variável abaixo guarda o local onde estão as fases em arquivo texto.
     char *arq_fases[] = {"fases/fase1.txt", "fases/fase2.txt", "fases/fase3.txt", "fases/fase4.txt"};
     int x = 0;
@@ -9,7 +10,7 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
     int fases = 0;
 
 
-    char char_count_linha[ TILES_X ]; // Qtde de caracteres por linha
+    char char_count_linha[ QTDE_TILES_X ]; // Qtde de caracteres por linha
 
 
     //O for abaixo é para preencher todas as fases.
@@ -24,14 +25,14 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
         FILE *fp = fopen(arq_fases[fases], "r");
 
         //Preenche a matriz na horizontal e vertical
-        for (y = 0; y < TILES_Y; y++) {
+        for (y = 0; y < QTDE_TILES_Y; y++) {
             /*
             Atribui na variável sLinha a linha atual do arquivo texto.
             Toda vez que essa rotina for chamada ele pula para a proxima linha e
             joga o valor para sLinha, até finalizar as 15 linhas.
              */
 
-            fgets(char_count_linha, TAM_TILES_X, fp);
+            fgets(char_count_linha, TAMANHO_TILES_X, fp);
 
 
             /*
@@ -41,7 +42,7 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
              */
 
 
-            for (x = 0; x < TILES_X; x++) {
+            for (x = 0; x < QTDE_TILES_X; x++) {
                 //printf("%c ", (int)char_count_linha[x]);
                 fases_cenario[fases][FRENTE][x][y] = -1;
 
@@ -132,53 +133,29 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]) {
 }
 
 /*
-A função abaixo é responsável por declarar e definir as imagens que iremos
-utilizar no vetor de texturas. Essas imagens estão dentro da pasta "imagens"
- */
-void carrega_texturas(BITMAP *pacman, BITMAP *pacman2, BITMAP *texturas[], BITMAP *numeros) {
-
-    //carrega a imagem do pacman
-    pacman = load_bitmap("imagens/pac-man.bmp", NULL);
-    pacman2 = load_bitmap("imagens/pac-man2.bmp", NULL);
-
-    // Define o índice 0 da textura como sendo parede
-    texturas[0] = load_bitmap("tiles/parede.bmp", NULL);
-
-    // Define o índice 1 da textura como sendo grama
-    texturas[1] = load_bitmap("tiles/grama.bmp", NULL);
-
-    // Define o índice 2 da textura como sendo chão
-    texturas[2] = load_bitmap("tiles/chao.bmp", NULL);
-
-    // Números
-    numeros = load_bitmap("imagens/numeros.bmp", NULL);
-
-}
-
-/*
 Esta função é responsável por desenhar as texturas do cenário. O cenário a ser
 carregado é informado através de um parâmetro. Essa função usa como base a matriz
 carregada anteriormente para desenhar as texturas.
  */
-void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet) {
+void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES][2][QTDE_TILES_X][QTDE_TILES_Y], BITMAP *namcap, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet) {
     int x = 0;
     int y = 0;
     char tile = ' ';
 
-    for (y = 0; y < TILES_Y; y++) {
-        for (x = 0; x < TILES_X; x++) {
+    for (y = 0; y < QTDE_TILES_Y; y++) {
+        for (x = 0; x < QTDE_TILES_X; x++) {
             if ((char) fases_cenario[fase_atual][FUNDO][x][y] == '#') { // Parede
-                draw_sprite(buffer, texturas[0], x * TAM_TILES_X, y * TAM_TILES_Y);
+                draw_sprite(buffer, texturas[0], x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
             } else {
                 if ((char) fases_cenario[fase_atual][FUNDO][x][y] == '-') { // Grama
                     tile = '-';
-                    draw_sprite(buffer, texturas[1], x * TAM_TILES_X, y * TAM_TILES_Y);
+                    draw_sprite(buffer, texturas[1], x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
                 } else {
                     if ((char) fases_cenario[fase_atual][FUNDO][x][y] == '.') { // Chão
                         tile = '.';
-                        draw_sprite(buffer, texturas[2], x * TAM_TILES_X, y * TAM_TILES_Y);
+                        draw_sprite(buffer, texturas[2], x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
                     } else {
-                        if ((char) fases_cenario[fase_atual][FUNDO][x][y] == 'P') { // Pacman
+                        if ((char) fases_cenario[fase_atual][FUNDO][x][y] == 'P') { // namcap
                             if (tile == ' ') {
                                 if ((char) fases_cenario[fase_atual][FUNDO][x + 1][y + 1] != '#') {
                                     tile = (char) fases_cenario[fase_atual][FUNDO][x + 1][y + 1];
@@ -193,33 +170,33 @@ void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES]
                                 }
                             }
                             if (tile == '-') { // Grama
-                                draw_sprite(buffer, texturas[1], x * TAM_TILES_X, y * TAM_TILES_Y);
+                                draw_sprite(buffer, texturas[1], x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
                             } else {
                                 if (tile == '.') { // Chão
-                                    draw_sprite(buffer, texturas[2], x * TAM_TILES_X, y * TAM_TILES_Y);
+                                    draw_sprite(buffer, texturas[2], x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
                                 }
                             }
 
                             switch (ultima_movimentacao) {
                                 case DIR_UP:
-                                    rotate_sprite(buffer, pacman, x * TAM_TILES_X, y * TAM_TILES_Y, itofix(-64));
+                                    rotate_sprite(buffer, namcap, x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y, itofix(-64));
                                     break;
                                 case DIR_DOWN:
-                                    rotate_sprite(buffer, pacman, x * TAM_TILES_X, y * TAM_TILES_Y, itofix(64));
+                                    rotate_sprite(buffer, namcap, x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y, itofix(64));
                                     break;
                                 case DIR_LEFT:
-                                    draw_sprite_h_flip(buffer, pacman, x * TAM_TILES_X, y * TAM_TILES_Y);
+                                    draw_sprite_h_flip(buffer, namcap, x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
                                     break;
                                 case DIR_RIGHT:
-                                    draw_sprite(buffer, pacman, x * TAM_TILES_X, y * TAM_TILES_Y);
+                                    draw_sprite(buffer, namcap, x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
                                     break;
                             }
                         } else {
                             if (tile == '-') { // Grama
-                                draw_sprite(buffer, texturas[1], x * TAM_TILES_X, y * TAM_TILES_Y);
+                                draw_sprite(buffer, texturas[1], x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
                             } else {
                                 if (tile == '.') { // Chão
-                                    draw_sprite(buffer, texturas[2], x * TAM_TILES_X, y * TAM_TILES_Y);
+                                    draw_sprite(buffer, texturas[2], x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y);
                                 }
                             }
                         }
@@ -241,10 +218,10 @@ void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES]
 
                 while (digitos > 0) {
                     if (digitos > 1) {
-                        masked_blit(sheet, buffer, 0, (int) (num / ((digitos - 1)*10))*30, (digitos_inicial - digitos)*15 + x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
-                        num -= ((digitos - 1) * 10 * ((int) (num / ((digitos - 1)*10))));
+                        masked_blit(sheet, buffer, 0, (int) (num / pow(10, digitos - 1))*30, (digitos_inicial - digitos)*15 + x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y, sheet->w, 27);
+                        num -= ((int) (num / pow(10, digitos - 1))) * pow(10, digitos - 1);
                     } else {
-                        masked_blit(sheet, buffer, 0, num * 30, (digitos_inicial - digitos)*15 + x * TAM_TILES_X, y * TAM_TILES_Y, sheet->w, 30);
+                        masked_blit(sheet, buffer, 0, num * 30, (digitos_inicial - digitos)*15 + x * TAMANHO_TILES_X, y * TAMANHO_TILES_Y, sheet->w, 30);
                     }
 
                     digitos--;
@@ -316,7 +293,7 @@ void fase_numeros_errados(int mat[], int fase) {
         case 3:
             //2x + 1
             for (i = 0; i < QTDE_SEQUENCIA; i++) {
-                mat[i] = 9 - (2*i);
+                mat[i] = 9 - (2 * i);
             }
 
             break;
@@ -325,7 +302,7 @@ void fase_numeros_errados(int mat[], int fase) {
 }
 
 char *nome_funcao(int numero_fase) {
-    switch(numero_fase){
+    switch (numero_fase) {
         case 0:
             return "Pares";
         case 1:
