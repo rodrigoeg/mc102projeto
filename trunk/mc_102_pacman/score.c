@@ -33,7 +33,7 @@ void salva_score(int scores[10], int score) {
     FILE *fp = fopen("fases/scores.txt", "w");
 
     for (i = 0; i < 10; i++) {
-        if (((score >= scores[i]) && (score_salvo == FALSE)) || ((i == 9) && (score_salvo == FALSE))) {
+        if ((score >= scores[i]) && (score_salvo == FALSE)) {
             itoa(score, char_count_linha, 10);
             itoa(i, numeracao, 10);
             strcat(numeracao, "|");
@@ -90,10 +90,9 @@ void update_score(BITMAP *buffer, BITMAP *numeros, BITMAP *score_bmp, int score)
 
     while (digitos > 0) {
         if (digitos > 1) {
-            masked_blit(numeros, buffer, 0, (int) (score / ((digitos - 1)*10))*30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
-            score -= ((digitos - 1) * 10 * ((int) (score / ((digitos - 1)*10))));
+            masked_blit(numeros, buffer, 0, (int) (score / pow(10, digitos - 1))*30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
+            score -= ((int) (score / pow(10, digitos - 1)))*pow(10, digitos - 1);
         } else {
-
             masked_blit(numeros, buffer, 0, score * 30, (digitos_inicial - digitos)*20 + 400, 0, numeros->w, 27);
         }
 

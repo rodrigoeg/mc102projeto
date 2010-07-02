@@ -1,60 +1,44 @@
-/*
- * File:   carrega_fases.h
- * Author: User
- *
- * Created on 4 de Junho de 2010, 23:34
- */
-
 #ifndef _CARREGA_FASES_H
 #define	_CARREGA_FASES_H
 
 #include "carrega_jogo.h"
 
 /**
- * 
- * @param pacman
- * @param pacman2
- * @param texturas
- * @param numeros
+ * Faz o carregamento das fases na matriz
+ * @param fases_cenario int[][][][]
  */
-void carrega_texturas(BITMAP *pacman, BITMAP *pacman2, BITMAP *texturas[], BITMAP *numeros);
+void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][QTDE_TILES_X][QTDE_TILES_Y]);
 
 /**
- *
- * @param fases_cenario
+ * Função que atualiza a tela do jogo
+ * @param buffer BITMAP*
+ * @param fase_atual int
+ * @param fases_cenario int[][][][]
+ * @param namcap BITMAP*
+ * @param texturas BITMAP*[]
+ * @param ultima_movimentacao int
+ * @param sheet BITMAP*
  */
-void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y]);
+void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES][2][QTDE_TILES_X][QTDE_TILES_Y], BITMAP *namcap, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet);
 
 /**
- *
- * @param buffer
- * @param fase_atual
- * @param fases_cenario
- * @param pacman
- * @param texturas
- * @param ultima_movimentacao
- * @param sheet
- */
-void atualiza_tela(BITMAP *buffer, int fase_atual, int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y], BITMAP *pacman, BITMAP *texturas[], int ultima_movimentacao, BITMAP *sheet);
-
-/**
- *
- * @param mat
- * @param fase
+ * Retorna os numeros de uma determinada função
+ * @param mat int[]
+ * @param fase int
  */
 void fase_funcao(int mat[], int fase);
 
 /**
- *
- * @param mat
- * @param fase
+ * Retorna um array com os numeros que não pertencem a função correta
+ * @param mat int[]
+ * @param fase int
  */
 void fase_numeros_errados(int mat[], int fase);
 
 /**
- *
- * @param numero_fase
- * @return
+ * Retorna o nome da funcao para escrever na fase atual
+ * @param numero_fase int
+ * @return char
  */
 char *nome_funcao(int numero_fase);
 

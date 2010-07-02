@@ -35,5 +35,5 @@ int atualizar_contador(BITMAP *buffer, BITMAP *sheet) {
 }
 
 void contador_teclado(void *buffer_teclado) {    
-    *(int *)buffer_teclado = TRUE;
+    *(int *)buffer_teclado = *(int *)buffer_teclado - 2;
 }

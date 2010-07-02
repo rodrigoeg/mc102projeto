@@ -1,16 +1,9 @@
-/*
- * File:   score.h
- * Author: User
- *
- * Created on 30 de Junho de 2010, 22:10
- */
-
 #ifndef SCORE_H
 #define	SCORE_H
 
 /**
  * Carrega os scores do arquivo texto no array
- * @param scores  int array de scores em ordem decrescente
+ * @param scores int array de scores em ordem decrescente
  */
 void le_score(int scores[10]);
 

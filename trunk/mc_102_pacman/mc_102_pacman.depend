@@ -81,3 +81,54 @@
 
 1277837613 c:\users\oscar\documents\cc010\mc102projeto\mc_102_pacman\score.h
 
+1277954800 source:c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\contador.c
+	"carrega_jogo.h"
+
+1278046557 c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\carrega_jogo.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<allegro.h>
+	<math.h>
+	"carrega_fases.h"
+	"contador.h"
+	"score.h"
+	"menu.h"
+	"namcap.h"
+	"teclado.h"
+
+1278042316 c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\carrega_fases.h
+	"carrega_jogo.h"
+
+1278038041 c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\contador.h
+	"carrega_jogo.h"
+
+1278040672 c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\score.h
+
+1278046332 source:c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\main.c
+	"carrega_jogo.h"
+
+1278045899 source:c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\menu.c
+	"carrega_jogo.h"
+
+1278042680 source:c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\namcap.c
+	"carrega_jogo.h"
+
+1278045690 source:c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\score.c
+	"carrega_jogo.h"
+
+1278046342 source:c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\teclado.c
+	"carrega_jogo.h"
+
+1278045936 source:c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\carrega_fases.c
+	"carrega_jogo.h"
+
+1278042316 c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\menu.h
+	"carrega_jogo.h"
+
+1278042316 c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\namcap.h
+	"carrega_jogo.h"
+
+1278046617 c:\documents and settings\user.pc\meus documentos\rodrigo\mc102\trunk\mc_102_pacman\teclado.h
+	"carrega_jogo.h"
+

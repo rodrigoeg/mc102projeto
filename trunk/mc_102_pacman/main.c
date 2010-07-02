@@ -3,25 +3,6 @@
 //global que define o estado do "X" da janela do programa, usado para fechá-lo.
 volatile int close_button_pressed = FALSE;
 
-int set_full_screen() {
-    // inicializa o modo gráfico com a resolução definida em modo tela cheia
-    if (set_gfx_mode(GFX_AUTODETECT_FULLSCREEN, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
-        allegro_message(allegro_error);
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
-int set_windowed() {
-    // inicializa o modo gráfico com a resolução definida em modo janela
-    if (set_gfx_mode(GFX_AUTODETECT_WINDOWED, LARGURA_TELA, ALTURA_TELA, 0, 0)) {
-        allegro_message(allegro_error);
-        return FALSE;
-    }
-    return TRUE;
-}
-
 int inicia_allegro() {
     // inicialize o sistema do Allegro
     allegro_init();
@@ -71,13 +52,9 @@ END_OF_FUNCTION(close_button_handler)
 
 void inicia_jogo() {
 
-    /*
-         Variáveis Mapa tridimensional sendo o primeiro ecrãn a Fase e os
-        outros dois correspondem a quantidade de Tiles na horizontal e vertical.
-     */
+     //Variável Mapa tridimensional.
+    int fases_cenario[QTDE_FASES][2][QTDE_TILES_X][QTDE_TILES_Y];
 
-
-    int fases_cenario[QTDE_FASES][2][TILES_X][TILES_Y];
     int fase_atual = 0; // Guarda o index da fase atual.
     int full_screen = FALSE;
     int ultima_movimentacao = DIR_RIGHT;
@@ -93,15 +70,15 @@ void inicia_jogo() {
 
 
     //Variável do tipo BITMAP responsável por guardar as texturas
-    BITMAP *pacman, *pacman2, *numeros, *score_bmp, *score_back, *final, *menu, *menu_instrucoes, *menu_selecionar_fase, *jogo_pausado, *scores_bmp;
+    BITMAP *namcap, *namcap2, *numeros, *score_bmp, *score_back, *final, *menu, *menu_instrucoes, *menu_selecionar_fase, *jogo_pausado, *scores_bmp;
     BITMAP * texturas[3];
 
     BITMAP *buffer = NULL;
     buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
-    //carrega a imagem do pacman
-    pacman = load_bitmap("imagens/pac-man.bmp", NULL);
-    pacman2 = load_bitmap("imagens/pac-man2.bmp", NULL);
+    //carrega a imagem do namcap
+    namcap = load_bitmap("imagens/pac-man.bmp", NULL);
+    namcap2 = load_bitmap("imagens/pac-man2.bmp", NULL);
 
     // Define o índice 0 da textura como sendo parede
     texturas[0] = load_bitmap("tiles/parede.bmp", NULL);
@@ -129,7 +106,7 @@ void inicia_jogo() {
     //Sons
     SAMPLE *come = load_sample("sons/come.wav"), *intro = load_sample("sons/intro.wav");
     MIDI *menu_m, *menu1, *menu2, *menu3, *fase1, *fase2, *fase3;
-    menu_m = load_midi("sons/menu principal.mid");
+    menu_m = load_midi("sons/menu_principal.mid");
     menu1 = load_midi("sons/extra1.mid");
     menu2 = load_midi("sons/extra2.mid");
     menu3 = load_midi("sons/extra3.mid");
@@ -142,17 +119,17 @@ void inicia_jogo() {
     play_midi(menu_m, TRUE);
 
 
-
+    //Tratamentos de stados do jogo
     while (!key[KEY_ESC] && !close_button_pressed) {
         switch (estado_jogo) {
             case MENU:
                 clear_bitmap(buffer);
-                menu_inicial_jogo(buffer, menu, &botao_mouse_pressionado, &estado_jogo, fases_cenario, &fase_atual, &score, come, menu1, menu2, menu3, pacman, texturas, ultima_movimentacao, numeros, score_back, intro, fase1);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3, come);
+                menu_inicial_jogo(buffer, menu, &botao_mouse_pressionado, &estado_jogo, fases_cenario, &fase_atual, &score, come, menu1, menu2, menu3, namcap, texturas, ultima_movimentacao, numeros, score_back, intro, fase1);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, namcap, texturas, numeros, score_back, intro, fase2, fase3, come);
                 break;
             case MENU_SELECIONAR_FASE:
                 clear_bitmap(buffer);
-                menu_sel_fase(buffer, menu_selecionar_fase, &botao_mouse_pressionado, &estado_jogo, fases_cenario, &fase_atual, &score, come, fase1, fase2, fase3, pacman, texturas, ultima_movimentacao, numeros, score_back, intro, menu_m);
+                menu_sel_fase(buffer, menu_selecionar_fase, &botao_mouse_pressionado, &estado_jogo, fases_cenario, &fase_atual, &score, come, fase1, fase2, fase3, namcap, texturas, ultima_movimentacao, numeros, score_back, intro, menu_m);
                 //menu_jogo(buffer, menu_selecionar_fase, &botao_mouse_pressionado, &estado_jogo, come, menu_m);
                 break;
             case MENU_INSTRUCOES:
@@ -167,8 +144,8 @@ void inicia_jogo() {
                 break;
             case JOGO:
                 clear_bitmap(buffer);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3, come);
-                atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, namcap, texturas, numeros, score_back, intro, fase2, fase3, come);
+                atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? namcap : namcap2, texturas, ultima_movimentacao, numeros);
                 draw_sprite(buffer, score_back, 0, 0);
 
                 update_score(buffer, numeros, score_bmp, score);
@@ -182,11 +159,11 @@ void inicia_jogo() {
                         fase_atual++;
                         novo_contador(TEMPO_FASE);
                         clear_bitmap(buffer);
-                        atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
+                        atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? namcap : namcap2, texturas, ultima_movimentacao, numeros);
                         draw_sprite(buffer, score_back, 0, 0);
                         blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
                         stop_midi();
-                        play_sample(intro, 500, 0, 1000, 0);
+                        play_sample(intro, 500, 50, 1000, 0);
                         rest(4000);
                         switch(fase_atual) {
                             case 1: {
@@ -204,7 +181,6 @@ void inicia_jogo() {
                 textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255),
                         -1, "FASE: %d %s", fase_atual + 1, nome_funcao(fase_atual));
 
-                //salva_score(scores, score);
                 break;
             case FINAL:
                 clear_bitmap(buffer);
@@ -219,8 +195,8 @@ void inicia_jogo() {
             case PAUSADO:
                 clear_bitmap(buffer);
                 clear_bitmap(buffer);
-                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, pacman, texturas, numeros, score_back, intro, fase2, fase3, come);
-                atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? pacman : pacman2, texturas, ultima_movimentacao, numeros);
+                teclado(fases_cenario, &fase_atual, &full_screen, &ultima_movimentacao, &frame, &estado_jogo, &score, scores,&sequencia, buffer, namcap, texturas, numeros, score_back, intro, fase2, fase3, come);
+                atualiza_tela(buffer, fase_atual, fases_cenario, frame == 0 ? namcap : namcap2, texturas, ultima_movimentacao, numeros);
                 draw_sprite(buffer, score_back, 0, 0);
 
                 update_score(buffer, numeros, score_bmp, score);
@@ -240,8 +216,8 @@ void inicia_jogo() {
     destroy_bitmap(texturas[0]);
     destroy_bitmap(texturas[1]);
     destroy_bitmap(texturas[2]);
-    destroy_bitmap(pacman);
-    destroy_bitmap(pacman2);
+    destroy_bitmap(namcap);
+    destroy_bitmap(namcap2);
     destroy_bitmap(numeros);
     destroy_bitmap(score_bmp);
     destroy_bitmap(score_back);
@@ -259,7 +235,6 @@ void inicia_jogo() {
     destroy_midi(fase3);
     destroy_sample(come);
     destroy_sample(intro);
-    //destroy_bitmap(mouse_sprite);
 }
 
 int main() {
