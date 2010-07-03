@@ -33,9 +33,12 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/timer.o \
+	${OBJECTDIR}/menu.o \
 	${OBJECTDIR}/carrega_fases.o \
+	${OBJECTDIR}/contador.o \
+	${OBJECTDIR}/namcap.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/teclado.o \
 	${OBJECTDIR}/score.o
 
 
@@ -63,20 +66,35 @@ dist/Release/MinGW-Windows/mc_102_pacman.exe: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/MinGW-Windows
 	${LINK.c} -lalleg -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mc_102_pacman ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/timer.o: timer.c 
+${OBJECTDIR}/menu.o: menu.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/timer.o timer.c
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/menu.o menu.c
 
 ${OBJECTDIR}/carrega_fases.o: carrega_fases.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/carrega_fases.o carrega_fases.c
 
+${OBJECTDIR}/contador.o: contador.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/contador.o contador.c
+
+${OBJECTDIR}/namcap.o: namcap.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/namcap.o namcap.c
+
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+
+${OBJECTDIR}/teclado.o: teclado.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/teclado.o teclado.c
 
 ${OBJECTDIR}/score.o: score.c 
 	${MKDIR} -p ${OBJECTDIR}
