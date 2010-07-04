@@ -4,7 +4,7 @@
 
 void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][QTDE_TILES_X][QTDE_TILES_Y]) {
     //A variável abaixo guarda o local onde estão as fases em arquivo texto.
-    char *arq_fases[] = {"fases/fase1.txt", "fases/fase2.txt", "fases/fase3.txt", "fases/fase4.txt"};
+    char *arq_fases[] = {"fases/fase1.txt", "fases/fase2.txt", "fases/fase3.txt"};
     int x = 0;
     int y = 0;
     int fases = 0;
@@ -21,16 +21,11 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][QTDE_TILES_X][QTDE_TIL
         fase_numeros_errados(mat_erradas, fases);
         char tile = ' ';
 
-        // Abre o arquivo de fases para leitura com base no iFase e o vetor de fases
+        // Abre o arquivo de fases para leitura com base no fases_cenario e o vetor de fases
         FILE *fp = fopen(arq_fases[fases], "r");
 
         //Preenche a matriz na horizontal e vertical
         for (y = 0; y < QTDE_TILES_Y; y++) {
-            /*
-            Atribui na variável sLinha a linha atual do arquivo texto.
-            Toda vez que essa rotina for chamada ele pula para a proxima linha e
-            joga o valor para sLinha, até finalizar as 15 linhas.
-             */
 
             fgets(char_count_linha, TAMANHO_TILES_X, fp);
 
@@ -124,12 +119,6 @@ void carrega_matriz_jogo(int fases_cenario[QTDE_FASES][2][QTDE_TILES_X][QTDE_TIL
         fclose(fp);
     }
 
-    /*for (y = 0; y < TILES_Y; y++) {
-         for (x = 0; x < TILES_X; x++) {
-             printf("%d " ,fases_cenario[2][FRENTE][x][y]);
-         }
-         printf("\n");
-    }*/
 }
 
 /*
@@ -253,14 +242,6 @@ void fase_funcao(int mat[], int fase) {
             for (i = 0; i < QTDE_SEQUENCIA; i++) {
                 mat[i] = 3 * i + 2;
             }
-
-            break;
-        case 3:
-            //8 - 2x
-            for (i = 0; i < QTDE_SEQUENCIA; i++) {
-                mat[i] = 10 - (2 * i);
-            }
-
             break;
     }
 
@@ -290,13 +271,6 @@ void fase_numeros_errados(int mat[], int fase) {
             }
 
             break;
-        case 3:
-            //2x + 1
-            for (i = 0; i < QTDE_SEQUENCIA; i++) {
-                mat[i] = 9 - (2 * i);
-            }
-
-            break;
     }
 
 }
@@ -309,9 +283,6 @@ char *nome_funcao(int numero_fase) {
             return "Ímpares";
         case 2:
             return "f(x)=3x+2";
-        case 3:
-            return "f(x)=10-2x";
-
     }
     return "Fase Desconhecida";
 }
